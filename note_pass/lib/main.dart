@@ -5,7 +5,6 @@ import './screens/home_screen.dart';
 import './utility/notepass_routs.dart';
 import 'package:flutter/services.dart';
 import './utility/shared_pref.dart' as sh;
-import './utility/db_helper.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
