@@ -14,14 +14,14 @@ class Txtriferimenti {
 
   static final _descrizione = RichText(
     text: const TextSpan(
-      style: TextStyle(fontSize: 16, color: Colors.black),
+      style: TextStyle(fontSize: 16, color: Colors.black, height: 1.3),
       text:
           "Once the configuration is done, the passwords will be saved on your device: it is advisable to change them before the first use.",
     ),
   );
   static final _descrizioneIta = RichText(
     text: const TextSpan(
-      style: TextStyle(fontSize: 16, color: Colors.black),
+      style: TextStyle(fontSize: 16, color: Colors.black, height: 1.3),
       text:
           "Una volta fatta la configurazione, le password verranno salvate sul tuo dispositivo: si consiglia di modificarle prima del primo utilizzo.",
     ),
@@ -33,9 +33,13 @@ class Txtriferimenti {
       'Questa azione genererà un nuovo elenco di password. Le password salvate, se presenti, verranno eliminate.';
 
   static const Text _descrizioneConfig = Text(
-      "1. Choose an image \n\n2. Type keywords \n\n3. Push the \"Generate\" button \n\nChoose an unique image and do not share it with anybody");
+    "1. Choose an image \n2. Type keywords \n3. Push the \"Generate\" button \nChoose an unique image and do not share it with anybody",
+    style: TextStyle(height: 1.5),
+  );
   static const Text _descrizioneConfigIta = Text(
-      "1. Scegli un'immagine \n\n2. Digita le parole chiave \n\n3. Premi \"Crea\" \n\nScegli un'immagine unica e non condividerla con nessuno");
+    "1. Scegli un'immagine \n2. Digita le parole chiave \n3. Premi \"Crea\" \nScegli un'immagine unica e non condividerla con nessuno",
+    style: TextStyle(height: 1.5),
+  );
 
   static const String _config = "Configurations";
   static const String _configIta = "Configurazioni";
@@ -43,6 +47,7 @@ class Txtriferimenti {
   static const String _testatahome = "Notepass - Home";
   static const String _testataConfig = "Notepass - Configurations";
   static const String _testataPasswords = "Notepass - Passwords";
+  static const String _testataAbout = "Notepass - About";
 
   static const String _keyword = "Keywords";
   static const String _keywordIta = "Parole chiavi";
@@ -90,6 +95,26 @@ class Txtriferimenti {
 
   static const String _pchiaveHintEng = "Keywords here ...";
   static const String _pchiaveHintIta = "Parole chiavi qui ...";
+
+  static const String _aboutEng = """Hi, I am Sepehr, creator of Notepass. 
+Remembering and managing passwords has always been a problem for me, 
+so I had the idea of using images as useful elements to generate strong and secure passwords. Images are much easier to remember than a complicated set of letters and numbers. 
+\nIn Notepass app, passwords are created based on image and the keyword entered by the user in configurations section.
+Therefore the user can always regenerate the same password list by inserting the same image and the same keywords used previously.
+""";
+  static const String _aboutIta = """Ciao, sono Sepehr, creatore di Notepass. 
+Ricordare e gestire le password è sempre stato un problema per me, così ho avuto l'idea di sfruttare le immagini come elementi utili per generare password efficaci e sicure. Infatti le immagini sono molto più facili da ricordare rispetto ad un insieme complicato di lettere e numeri.
+\nNotepass genera una serie di password complesse e uniche. Le password vengono create in base all'immagine e alla parola chiave inserite dall'utente nella sezione "configurazioni".
+Quindi l'utente può rigenerare sempre lo stesso elenco di password inserendo la stessa immagine e le stesse parole chiavi usate precedentemente.""";
+
+  getTxtAbout(lang) {
+    switch (lang) {
+      case "eng":
+        return _aboutEng;
+      case "ita":
+        return _aboutIta;
+    }
+  }
 
   getTxtInputTestata(lang) {
     switch (lang) {
@@ -229,6 +254,8 @@ class Txtriferimenti {
         return _testataConfig;
       case "pass":
         return _testataPasswords;
+      case "about":
+        return _testataAbout;
     }
   }
 

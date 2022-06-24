@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:note_pass/screens/config_screen.dart';
 import 'package:note_pass/screens/passwords_screen.dart';
+import 'package:flutter/services.dart';
 import './screens/home_screen.dart';
 import './utility/notepass_routs.dart';
-import 'package:flutter/services.dart';
+import './screens/about_screen.dart';
 import './utility/shared_pref.dart' as sh;
 
 Future main() async {
@@ -34,7 +35,8 @@ class _MyAppState extends State<MyApp> {
       routes: {
         '/': (context) => const HomeScreen(),
         Routs().getrouts("config"): (context) => const ConfigScreen(),
-        Routs().getrouts("pass"): (context) => const PasswordsScreen()
+        Routs().getrouts("pass"): (context) => const PasswordsScreen(),
+        Routs().getrouts("about"): (context) => const About(),
       },
     );
   }

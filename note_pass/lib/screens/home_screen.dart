@@ -212,7 +212,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       });
                     }
                   },
-                  child: Text(Txtriferimenti().getTxtConfiguration(linguaggio)),
+                  child: Text(
+                    Txtriferimenti().getTxtConfiguration(linguaggio),
+                  ),
                 ),
                 const SizedBox(
                   height: 25.0,
@@ -257,6 +259,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ),
+                const SizedBox(
+                  height: 100,
+                ),
+                TextButton(
+                    onPressed: () => Navigator.of(context)
+                        .pushNamed(Routs().getrouts("about")),
+                    child: const Text("About")),
               ],
             ),
           ),
