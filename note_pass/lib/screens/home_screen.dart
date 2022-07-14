@@ -222,7 +222,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 ElevatedButton(
                   onPressed: () {
                     if (dataList!.isEmpty) {
-                      // peobabilita n 1
                       if (_giaEntrato == false) {
                         DBhelper.updateRiga(
                             DBhelper.tableName,

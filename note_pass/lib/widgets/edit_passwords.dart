@@ -6,19 +6,19 @@ import '../utility/shared_pref.dart' as sh;
 import '../utility/txt_riferimento.dart';
 import '../utility/db_helper.dart';
 
-class UnPasswoed extends StatefulWidget {
+class UnPassword extends StatefulWidget {
   final String _initVal;
   final String _hint;
   final int _id;
   final int _used;
 
 // ignore: use_key_in_widget_constructors
-  const UnPasswoed(this._initVal, this._hint, this._id, this._used);
+  const UnPassword(this._initVal, this._hint, this._id, this._used);
   @override
-  State<UnPasswoed> createState() => _UnPasswoedState();
+  State<UnPassword> createState() => _UnPasswordState();
 }
 
-class _UnPasswoedState extends State<UnPasswoed> {
+class _UnPasswordState extends State<UnPassword> {
   bool _passwordVisible = false;
   bool _obsTxt = true;
 

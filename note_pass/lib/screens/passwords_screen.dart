@@ -44,7 +44,7 @@ class _PasswordsScreenState extends State<PasswordsScreen> {
           padding: const EdgeInsets.all(15),
           children: tmp!
               .map(
-                (e) => UnPasswoed(e.pwd, e.hint, e.id, e.flag),
+                (e) => UnPassword(e.pwd, e.hint, e.id, e.flag),
               )
               .toList(),
         ),
