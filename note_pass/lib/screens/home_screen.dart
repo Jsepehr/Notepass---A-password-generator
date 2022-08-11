@@ -16,6 +16,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  bool colors = false;
   @override
   void initState() {
     linguaggio = sh.SharedPref.getStatoDelVar() ?? 'eng';
@@ -61,6 +62,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future fetchAndSetPasswords() async {
     dataList = await DBhelper.getData(DBhelper.tableName);
+    setState(() {
+      colors = dataList!.isEmpty;
+    });
   }
 
   String? lingua = sh.SharedPref.getStatoDelVar() ?? 'eng';
@@ -195,7 +199,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 OutlinedButton(
                   style: OutlinedButton.styleFrom(
-                    side: const BorderSide(color: Colors.blue),
+                    side: colors
+                        ? const BorderSide(color: Colors.blue)
+                        : const BorderSide(
+                            color: Color.fromARGB(255, 218, 218, 218)),
                   ),
                   onPressed: () {
                     if (_giaEntrato == false) {
@@ -214,6 +221,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                   child: Text(
                     Txtriferimenti().getTxtConfiguration(linguaggio),
+                    style: TextStyle(
+                        color: !colors
+                            ? const Color.fromARGB(255, 218, 218, 218)
+                            : Colors.blue),
                   ),
                 ),
                 const SizedBox(
@@ -251,6 +262,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       }
                     }
                   },
+                  style: ButtonStyle(
+                      backgroundColor: colors
+                          ? MaterialStateProperty.all(
+                              const Color.fromARGB(255, 234, 234, 234))
+                          : MaterialStateProperty.all(Colors.blue)),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 12),
                     child: Text(

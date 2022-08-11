@@ -42,7 +42,7 @@ class _UnPasswordState extends State<UnPassword> {
     Fluttertoast.showToast(
         msg: hint,
         toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
+        gravity: ToastGravity.TOP_RIGHT,
         timeInSecForIosWeb: 1,
         backgroundColor: const Color.fromARGB(150, 0, 0, 0),
         textColor: Colors.white,
@@ -54,35 +54,49 @@ class _UnPasswordState extends State<UnPassword> {
     return Center(
       child: Column(
         children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextFormField(
-              decoration: InputDecoration(
-                suffixIcon: IconButton(
-                  icon: Icon(
-                    // Based on passwordVisible state choose the icon
-                    _passwordVisible ? Icons.visibility : Icons.visibility_off,
-                    color: widget._used == 0
-                        ? Theme.of(context).primaryColorDark
-                        : Colors.amber.shade800,
-                  ),
-                  onPressed: () {
-                    // Update the state i.e. toogle the state of passwordVisible variable
-                    setState(() {
-                      _passwordVisible = !_passwordVisible;
-                      _obsTxt = !_obsTxt;
-                    });
-                  },
-                ),
-              ),
-              textAlign: TextAlign.left,
-              initialValue: widget._initVal,
-              readOnly: true,
-              obscureText: _obsTxt ? true : false,
-              style: const TextStyle(
-                  letterSpacing: 5, fontSize: 20, color: Colors.grey),
+          Stack(children: [
+            Positioned(
+              left: 10,
+              child: widget._hint.isNotEmpty
+                  ? Text(
+                      widget._hint,
+                      style: TextStyle(color: Colors.grey.shade500),
+                    )
+                  : Text('Hint...',
+                      style: TextStyle(color: Colors.grey.shade500)),
             ),
-          ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextFormField(
+                decoration: InputDecoration(
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      // Based on passwordVisible state choose the icon
+                      _passwordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                      color: widget._used == 0
+                          ? Theme.of(context).primaryColorDark
+                          : Colors.amber.shade800,
+                    ),
+                    onPressed: () {
+                      // Update the state i.e. toogle the state of passwordVisible variable
+                      setState(() {
+                        _passwordVisible = !_passwordVisible;
+                        _obsTxt = !_obsTxt;
+                      });
+                    },
+                  ),
+                ),
+                textAlign: TextAlign.left,
+                initialValue: widget._initVal,
+                readOnly: true,
+                obscureText: _obsTxt ? true : false,
+                style: const TextStyle(
+                    letterSpacing: 5, fontSize: 20, color: Colors.grey),
+              ),
+            ),
+          ]),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
@@ -96,7 +110,7 @@ class _UnPasswordState extends State<UnPassword> {
                         .getTxtEdit(sh.SharedPref.getStatoDelVar() ?? "eng"),
                   ),
                 ),
-                ElevatedButton(
+                /*ElevatedButton(
                   style: widget._hint.isEmpty
                       ? ButtonStyle(
                           backgroundColor:
@@ -110,7 +124,7 @@ class _UnPasswordState extends State<UnPassword> {
                     Txtriferimenti()
                         .getTxtHint(sh.SharedPref.getStatoDelVar() ?? "eng"),
                   ),
-                ),
+                ),*/
                 ElevatedButton(
                   onPressed: () => saveToClipBoard(widget._initVal),
                   child: Text(
@@ -122,8 +136,9 @@ class _UnPasswordState extends State<UnPassword> {
             ),
           ),
           const SizedBox(
-            height: 30,
+            height: 20,
           ),
+          //const Divider(thickness: 5),
         ],
       ),
     );

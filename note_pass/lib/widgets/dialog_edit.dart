@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:note_pass/utility/txt_riferimento.dart';
-import 'package:note_pass/utility/utility_functions.dart';
 import '../utility/db_helper.dart';
+import '../utility/notepass_routs.dart';
 import '../utility/shared_pref.dart' as sh;
 
 class ShowMeDialog {
@@ -47,8 +47,9 @@ class ShowMeDialog {
                   // passwird input
                   initialValue: hint,
                   onChanged: (input) => _hint = input,
-                  decoration: const InputDecoration(
-                    hintText: "Hint ...",
+                  decoration: InputDecoration(
+                    hintText:
+                        "${Txtriferimenti().getTxtHint(sh.SharedPref.getStatoDelVar() ?? "eng").toString()}...",
                   ),
                   textAlign: TextAlign.left,
                   readOnly: false,
@@ -80,18 +81,20 @@ class ShowMeDialog {
                       {DBhelper.collumsNames[1]: _input},
                       id,
                       DBhelper.collumsNames[0]);
-                  Navigator.of(context).pushNamedAndRemoveUntil("/", (_) {
+                  Navigator.of(context)
+                      .pushNamedAndRemoveUntil(Routs().getrouts("load"), (_) {
                     return false;
-                  }, arguments: Args(null, null, "saved"));
+                  });
                 } else if (_hint != null && _input == null) {
                   DBhelper.updateRiga(
                       DBhelper.tableName,
                       {DBhelper.collumsNames[2]: _hint},
                       id,
                       DBhelper.collumsNames[0]);
-                  Navigator.of(context).pushNamedAndRemoveUntil("/", (_) {
+                  Navigator.of(context)
+                      .pushNamedAndRemoveUntil(Routs().getrouts("load"), (_) {
                     return false;
-                  }, arguments: Args(null, null, "saved"));
+                  });
                 } else {
                   DBhelper.updateRiga(
                       DBhelper.tableName,
@@ -103,9 +106,10 @@ class ShowMeDialog {
                       {DBhelper.collumsNames[2]: _hint},
                       id,
                       DBhelper.collumsNames[0]);
-                  Navigator.of(context).pushNamedAndRemoveUntil("/", (_) {
+                  Navigator.of(context)
+                      .pushNamedAndRemoveUntil(Routs().getrouts("load"), (_) {
                     return false;
-                  }, arguments: Args(null, null, "saved"));
+                  });
                 }
               },
             ),
