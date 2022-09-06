@@ -16,14 +16,14 @@ class Txtriferimenti {
     text: const TextSpan(
       style: TextStyle(fontSize: 16, color: Colors.black, height: 1.3),
       text:
-          "Once the configuration is done, the passwords will be saved on your device: it is advisable to change them before the first use.",
+          "Once the configuration is done, the passwords will be saved on your device.",
     ),
   );
   static final _descrizioneIta = RichText(
     text: const TextSpan(
       style: TextStyle(fontSize: 16, color: Colors.black, height: 1.3),
       text:
-          "Una volta fatta la configurazione, le password verranno salvate sul tuo dispositivo: si consiglia di modificarle prima del primo utilizzo.",
+          "Una volta fatta la configurazione, le password verranno salvate sul tuo dispositivo.",
     ),
   );
 

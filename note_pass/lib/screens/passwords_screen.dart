@@ -31,7 +31,6 @@ class _PasswordsScreenState extends State<PasswordsScreen> {
     tempNotEmpty
         .sort(((a, b) => a.hint.toLowerCase().compareTo(b.hint.toLowerCase())));
     tmp = List.from(tempNotEmpty)..addAll(tempEmpty);
-    print('${tmp!.length}  lenght');
   }
 
   @override

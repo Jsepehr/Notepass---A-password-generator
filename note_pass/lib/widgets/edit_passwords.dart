@@ -128,7 +128,7 @@ class _UnPasswordState extends State<UnPassword> {
                 ),*/
                 ElevatedButton(
                   onPressed: () => {
-                    Share.share('${widget._hint}\n${widget._initVal}'),
+                    Share.share(widget._initVal),
                     DBhelper.updateRiga(
                         DBhelper.tableName,
                         {DBhelper.collumsNames[3]: 1},
