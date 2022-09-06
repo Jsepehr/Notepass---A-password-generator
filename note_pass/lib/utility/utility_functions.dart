@@ -55,7 +55,7 @@ spilitList(List listaInput) {
 dueInUno(List elle1, List elle2) {
   var listaFinale = [];
   var tmpStr = "";
-  for (var i = 0; i < 30; i++) {
+  for (var i = 0; i < 50; i++) {
     tmpStr = elle1[i] + elle2[i];
     listaFinale.add(tmpStr);
     tmpStr = "";
@@ -209,16 +209,16 @@ class PwdEnt {
   final int _pwdId;
   final String _pwdCorpo;
   final String _pwdHint;
-  final int _falgUsed;
+  final int _flagUsed;
 
-  PwdEnt({required passId, required corpo, required hint, required falgUsed})
+  PwdEnt({required passId, required corpo, required hint, required flagUsed})
       : _pwdId = passId,
         _pwdCorpo = corpo,
         _pwdHint = hint,
-        _falgUsed = falgUsed;
+        _flagUsed = flagUsed;
 
   get pwd => _pwdCorpo;
   get hint => _pwdHint;
   get id => _pwdId;
-  get flag => _falgUsed;
+  get flag => _flagUsed;
 }

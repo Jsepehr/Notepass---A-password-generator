@@ -75,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     List<PwdEnt> pwdList = [];
 
-    final List<String> numsForRand =
+    final List<String> numForRand =
         Txtriferimenti().getTxtFixedString().split(',');
 
     int i = 0;
@@ -84,11 +84,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if (args1 != null && args1.messaggio == "gen") {
       DBhelper.delete(DBhelper.tableName);
-      var pass1 = allDonePreDB(args1.hash1, numsForRand);
-      var pass2 = allDonePreDB(args1.hash2, numsForRand);
+      var pass1 = allDonePreDB(args1.hash1, numForRand);
+      var pass2 = allDonePreDB(args1.hash2, numForRand);
       for (var item in dueInUno(pass1, pass2)) {
         i++;
-        pwdList.add(PwdEnt(passId: i, corpo: item, hint: '', falgUsed: 0));
+        pwdList.add(PwdEnt(passId: i, corpo: item, hint: '', flagUsed: 0));
       }
       for (var element in pwdList) {
         DBhelper.insert(DBhelper.tableName, {

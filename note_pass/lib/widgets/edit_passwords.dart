@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:share/share.dart';
+import '../utility/notepass_routs.dart';
 import '../widgets/dialog_edit.dart';
 import '../utility/shared_pref.dart' as sh;
 import '../utility/txt_riferimento.dart';
@@ -22,7 +23,7 @@ class _UnPasswordState extends State<UnPassword> {
   bool _passwordVisible = false;
   bool _obsTxt = true;
 
-  Future<void> saveToClipBoard(String testoDaSalvare) async {
+  /* Future<void> saveToClipBoard(String testoDaSalvare) async {
     ClipboardData data = ClipboardData(text: testoDaSalvare);
     await Clipboard.setData(data);
     await Fluttertoast.showToast(
@@ -36,7 +37,7 @@ class _UnPasswordState extends State<UnPassword> {
         fontSize: 16.0);
     DBhelper.updateRiga(DBhelper.tableName, {DBhelper.collumsNames[3]: 1},
         widget._id, DBhelper.collumsNames[0]);
-  }
+  }*/
 
   showHint(String hint) {
     Fluttertoast.showToast(
@@ -62,7 +63,7 @@ class _UnPasswordState extends State<UnPassword> {
                       widget._hint,
                       style: TextStyle(color: Colors.grey.shade500),
                     )
-                  : Text('Hint...',
+                  : Text('Comments...',
                       style: TextStyle(color: Colors.grey.shade500)),
             ),
             Padding(
@@ -126,7 +127,15 @@ class _UnPasswordState extends State<UnPassword> {
                   ),
                 ),*/
                 ElevatedButton(
-                  onPressed: () => saveToClipBoard(widget._initVal),
+                  onPressed: () => {
+                    Share.share('${widget._hint}\n${widget._initVal}'),
+                    DBhelper.updateRiga(
+                        DBhelper.tableName,
+                        {DBhelper.collumsNames[3]: 1},
+                        widget._id,
+                        DBhelper.collumsNames[0]),
+                    Navigator.of(context).pushNamed(Routs().getrouts("load"))
+                  },
                   child: Text(
                     Txtriferimenti()
                         .getTxtCopy(sh.SharedPref.getStatoDelVar() ?? "eng"),

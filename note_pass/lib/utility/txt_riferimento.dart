@@ -77,8 +77,8 @@ class Txtriferimenti {
   static const String _hint = "Hint";
   static const String _hintIta = "Suggerimento";
 
-  static const String _copy = "Copy";
-  static const String _copia = "Copia";
+  static const String _copy = "Share";
+  static const String _copia = "Condividi";
 
   static const String _genrated = "Passwords are generated";
   static const String _generatedIta = "Le password sono state create";

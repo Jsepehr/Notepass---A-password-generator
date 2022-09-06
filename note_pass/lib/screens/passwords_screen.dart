@@ -16,24 +16,30 @@ class PasswordsScreen extends StatefulWidget {
 class _PasswordsScreenState extends State<PasswordsScreen> {
   List<PwdEnt>? tmp;
   List args1 = [];
-  preparaData() async {
-    debugPrint("preparaladata");
+  prepareData() async {
+    //debugPrint("prepareData");
     args1 = await DBhelper.getData(DBhelper.tableName);
     tmp = args1
         .map((e) => PwdEnt(
             passId: e["id"],
             corpo: e["Corpo_P"],
             hint: e["Hint_P"],
-            falgUsed: e["used"]))
+            flagUsed: e["used"]))
         .toList();
+    var tempNotEmpty = tmp!.where((e) => e.hint != '').toList();
+    var tempEmpty = tmp!.where((e) => e.hint == '').toList();
+    tempNotEmpty
+        .sort(((a, b) => a.hint.toLowerCase().compareTo(b.hint.toLowerCase())));
+    tmp = List.from(tempNotEmpty)..addAll(tempEmpty);
+    print('${tmp!.length}  lenght');
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: preparaData(),
+      future: prepareData(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
-        preparaData();
+        prepareData();
         if (snapshot.connectionState == ConnectionState.done) {
           return Scaffold(
             floatingActionButtonLocation:
