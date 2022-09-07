@@ -29,7 +29,8 @@ class _HomeScreenState extends State<HomeScreen> {
     final localAuth = LocalAuthentication();
     final didAuthenticate = await localAuth.authenticate(
       localizedReason: 'Please authenticate',
-      options: const AuthenticationOptions(biometricOnly: false),
+      options: const AuthenticationOptions(
+          biometricOnly: false, useErrorDialogs: true, stickyAuth: true),
     );
     if (didAuthenticate && whereTogo == "config" && data == null) {
       // ignore: use_build_context_synchronously
