@@ -98,11 +98,15 @@ class PasswordsScreen extends StatelessWidget {
                 children: [
                   const SizedBox(height: 15),
                   Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 40),
-                      child: searchField()),
+                    padding: const EdgeInsets.symmetric(horizontal: 40),
+                    child: searchField(),
+                  ),
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.7,
-                    child: null,
+                    child: ListView(
+                      padding: const EdgeInsets.all(15),
+                      children: [...ListV().getList(tmp)],
+                    ),
                   ),
                 ],
               ),
@@ -117,16 +121,12 @@ class PasswordsScreen extends StatelessWidget {
 }
 
 class ListV extends ChangeNotifier {
-  List<PwdEnt>? tmp;
-
-  ListView  passwordsList() {
-    return ListView(
-      padding: const EdgeInsets.all(15),
-      children: tmp!
-          .map(
-            (e) => UnPassword(e.pwd, e.hint, e.id, e.flag),
-          )
-          .toList(),
-    );
+  getList(tmp1) {
+    notifyListeners();
+    return tmp1
+        .map(
+          (e) => UnPassword(e.pwd, e.hint, e.id, e.flag),
+        )
+        .toList();
   }
 }
