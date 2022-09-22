@@ -22,9 +22,9 @@ class DBhelper {
     db.insert(table, data, conflictAlgorithm: sql.ConflictAlgorithm.replace);
   }
 
-  static Future<List<Map<String, Object?>>> getData(String table) async {
+  static Future<List<Map<String, Object?>>> getData() async {
     final db = await DBhelper.database();
-    return db.query(table);
+    return db.query(tableName);
   }
 
   static Future<void> delete(String table) async {
@@ -45,5 +45,13 @@ class DBhelper {
     final db = await DBhelper.database();
     return db.query(table,
         columns: columsName, where: '"id" = ?', whereArgs: idNum);
+  }
+
+  static Future<List<Map<String, Object?>>> filterByHint(String str) async {
+    final db = await DBhelper.database();
+    return db.query(tableName,
+        columns: collumsNames,
+        where: '${collumsNames[2]} LIKE ?',
+        whereArgs: ['%$str%']);
   }
 }

@@ -37,7 +37,7 @@ class _MyAppState extends State<MyApp> {
       routes: {
         '/': (context) => const HomeScreen(),
         Routs().getrouts("config"): (context) => const ConfigScreen(),
-        Routs().getrouts("pass"): (context) => const PasswordsScreen(),
+        Routs().getrouts("pass"): (context) =>  PasswordsScreen(),
         Routs().getrouts("about"): (context) => const About(),
         Routs().getrouts("load"): (context) => const Loading(),
       },

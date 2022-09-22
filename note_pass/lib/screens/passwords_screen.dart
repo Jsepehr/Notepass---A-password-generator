@@ -1,44 +1,83 @@
 import 'package:flutter/material.dart';
-//import 'package:provider/provider.dart';
 import '../utility/txt_riferimento.dart';
 import '../widgets/edit_passwords.dart';
 import '../utility/utility_functions.dart';
 import '../utility/db_helper.dart';
 import '../screens/loading_screen.dart';
 
-class PasswordsScreen extends StatefulWidget {
-  const PasswordsScreen({Key? key}) : super(key: key);
+class PasswordsScreen extends StatelessWidget {
+  PasswordsScreen({Key? key}) : super(key: key);
 
-  @override
-  State<PasswordsScreen> createState() => _PasswordsScreenState();
-}
-
-class _PasswordsScreenState extends State<PasswordsScreen> {
   List<PwdEnt>? tmp;
+  List<PwdEnt>? tmpFiltered;
   List args1 = [];
-  prepareData() async {
-    //debugPrint("prepareData");
-    args1 = await DBhelper.getData(DBhelper.tableName);
-    tmp = args1
-        .map((e) => PwdEnt(
-            passId: e["id"],
-            corpo: e["Corpo_P"],
-            hint: e["Hint_P"],
-            flagUsed: e["used"]))
-        .toList();
-    var tempNotEmpty = tmp!.where((e) => e.hint != '').toList();
-    var tempEmpty = tmp!.where((e) => e.hint == '').toList();
-    tempNotEmpty
-        .sort(((a, b) => a.hint.toLowerCase().compareTo(b.hint.toLowerCase())));
-    tmp = List.from(tempNotEmpty)..addAll(tempEmpty);
+  String? val;
+
+  prepareData({String? query = ''}) async {
+    if (query == '' || query == null) {
+      args1 = await DBhelper.getData();
+      tmp = args1
+          .map((e) => PwdEnt(
+              passId: e["id"],
+              corpo: e["Corpo_P"],
+              hint: e["Hint_P"],
+              flagUsed: e["used"]))
+          .toList();
+    } else {
+      args1 = await DBhelper.filterByHint(query);
+      tmp = args1
+          .map((e) => PwdEnt(
+              passId: e["id"],
+              corpo: e["Corpo_P"],
+              hint: e["Hint_P"],
+              flagUsed: e["used"]))
+          .toList();
+    }
+  }
+
+  Widget searchField() {
+    return TextField(
+      onChanged: (value) {
+        val = value;
+        prepareData(query: val);
+      },
+      cursorHeight: 20,
+      autofocus: false,
+      controller: TextEditingController(text: val),
+      decoration: InputDecoration(
+        //labelText: 'Search',
+        hintText: 'Comments...',
+        hintStyle: const TextStyle(
+          color: Color.fromARGB(255, 215, 215, 215),
+        ),
+        prefixIcon: const Icon(Icons.search),
+        // suffixIcon: Icon(Icons.keyboard_arrow_down),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(30),
+          borderSide: const BorderSide(
+              color: Color.fromARGB(255, 215, 215, 215), width: 2),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(30),
+          borderSide: const BorderSide(
+              color: Color.fromARGB(255, 215, 215, 215), width: 1.5),
+        ),
+        /*focusedBorder: OutlineInputBorder(
+          gapPadding: 0.0,
+          borderRadius: BorderRadius.circular(30),
+          borderSide: BorderSide(color: Colors.red, width: 1.5),
+        ),*/
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: prepareData(),
+      future: prepareData(query: val),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
-        prepareData();
+        //prepareData();
         if (snapshot.connectionState == ConnectionState.done) {
           return Scaffold(
             floatingActionButtonLocation:
@@ -54,15 +93,18 @@ class _PasswordsScreenState extends State<PasswordsScreen> {
             appBar: AppBar(
               title: Text(Txtriferimenti().getTxtTestata("pass")),
             ),
-            body: SizedBox(
-              height: MediaQuery.of(context).size.height * 0.79,
-              child: ListView(
-                padding: const EdgeInsets.all(15),
-                children: tmp!
-                    .map(
-                      (e) => UnPassword(e.pwd, e.hint, e.id, e.flag),
-                    )
-                    .toList(),
+            body: SingleChildScrollView(
+              child: Column(
+                children: [
+                  const SizedBox(height: 15),
+                  Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 40),
+                      child: searchField()),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.7,
+                    child: null,
+                  ),
+                ],
               ),
             ),
           );
@@ -70,6 +112,21 @@ class _PasswordsScreenState extends State<PasswordsScreen> {
           return const Loading();
         }
       },
+    );
+  }
+}
+
+class ListV extends ChangeNotifier {
+  List<PwdEnt>? tmp;
+
+  ListView  passwordsList() {
+    return ListView(
+      padding: const EdgeInsets.all(15),
+      children: tmp!
+          .map(
+            (e) => UnPassword(e.pwd, e.hint, e.id, e.flag),
+          )
+          .toList(),
     );
   }
 }

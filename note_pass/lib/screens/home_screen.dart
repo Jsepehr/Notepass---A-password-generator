@@ -62,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Map<String, Object?>>? dataList;
 
   Future fetchAndSetPasswords() async {
-    dataList = await DBhelper.getData(DBhelper.tableName);
+    dataList = await DBhelper.getData();
     setState(() {
       colors = dataList!.isEmpty;
     });
