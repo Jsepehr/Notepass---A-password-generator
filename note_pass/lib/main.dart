@@ -3,6 +3,7 @@ import 'package:note_pass/screens/config_screen.dart';
 import 'package:note_pass/screens/loading_screen.dart';
 import 'package:note_pass/screens/passwords_screen.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import './screens/home_screen.dart';
 import './utility/notepass_routs.dart';
 import './screens/about_screen.dart';
@@ -32,15 +33,18 @@ class _MyAppState extends State<MyApp> {
       DeviceOrientation.portraitUp,
     ]);
 
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      routes: {
-        '/': (context) => const HomeScreen(),
-        Routs().getrouts("config"): (context) => const ConfigScreen(),
-        Routs().getrouts("pass"): (context) =>  PasswordsScreen(),
-        Routs().getrouts("about"): (context) => const About(),
-        Routs().getrouts("load"): (context) => const Loading(),
-      },
+    return ChangeNotifierProvider(
+      create: (context) => PasswordsScreen(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        routes: {
+          '/': (context) => const HomeScreen(),
+          Routs().getrouts("config"): (context) => const ConfigScreen(),
+          Routs().getrouts("pass"): (context) =>  PasswordsScreen(),
+          Routs().getrouts("about"): (context) => const About(),
+          Routs().getrouts("load"): (context) => const Loading(),
+        },
+      ),
     );
   }
 }

@@ -45,9 +45,9 @@ class Txtriferimenti {
   static const String _configIta = "Configurazioni";
 
   static const String _testatahome = "Notepass - Home";
-  static const String _testataConfig = "Notepass - Configurations";
-  static const String _testataPasswords = "Notepass - Passwords";
-  static const String _testataAbout = "Notepass - About";
+  static const String _testataConfig = "Configurations";
+  static const String _testataPasswords = "Passwords";
+  static const String _testataAbout = "About";
 
   static const String _keyword = "Keywords";
   static const String _keywordIta = "Parole chiavi";
