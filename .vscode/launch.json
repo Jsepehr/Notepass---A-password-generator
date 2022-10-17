@@ -1,0 +1,28 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "note_pass",
+            "cwd": "note_pass",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "note_pass (profile mode)",
+            "cwd": "note_pass",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "note_pass (release mode)",
+            "cwd": "note_pass",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        }
+    ]
+}

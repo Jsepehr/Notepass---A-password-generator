@@ -2,11 +2,17 @@ import 'dart:core';
 import 'dart:io';
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'utility_functions.dart' as utf;
 
 //prendi stringa e fai la lista dei pwd
 allDonePreDB(String? digest, List numsForRand) {
-  List seed = utf.analisiIndici(utf.listToString(utf.strToASCII(digest!)));
+  List seed = utf.analisiIndici(
+    utf.listToString(
+      utf.strToASCII(digest!),
+    ),
+  );
   List upAbc = utf.mescolaLista(utf.makeArrASHII(26, 65), seed);
   List lwdAbc = utf.mescolaLista(utf.makeArrASHII(26, 97), seed);
   List numbers = utf.mescolaLista(utf.makeArrASHII(10, 48), seed);
@@ -20,15 +26,15 @@ allDonePreDB(String? digest, List numsForRand) {
   return listapsUnico;
 }
 
-makeArrASHII(int l, int fine) {
+List<int> makeArrASHII(int l, int fine) {
   //dovrebbe generare una lista numeri
   var list = List<int>.generate(l, (i) => i + fine);
   return list;
 }
 
 //una funzione che prende una stringa e restituisce una lista di numeri
-strToASCII(String s) {
-  var list = <int>[];
+List<int> strToASCII(String s) {
+  List<int> list = [];
 
   for (var i = 0; i < s.length; i++) {
     list.add(s.codeUnitAt(i));
@@ -200,7 +206,6 @@ generateStringHash(String str) {
 
 class Args {
   final String? hash1, hash2, messaggio;
-
   Args(this.hash1, this.hash2, this.messaggio);
 }
 
@@ -210,15 +215,45 @@ class PwdEnt {
   final String _pwdCorpo;
   final String _pwdHint;
   final int _flagUsed;
+  final Function? _fun;
 
-  PwdEnt({required passId, required corpo, required hint, required flagUsed})
+  PwdEnt({required passId, required corpo, required hint, required flagUsed, fun})
       : _pwdId = passId,
         _pwdCorpo = corpo,
         _pwdHint = hint,
-        _flagUsed = flagUsed;
+        _flagUsed = flagUsed,
+        _fun = fun;
 
   get pwd => _pwdCorpo;
   get hint => _pwdHint;
   get id => _pwdId;
   get flag => _flagUsed;
+  get fun => _fun;
+}
+
+//the function splitList generates a list of lists
+List<List<Object>> splitList(List input, int chunkSize) {
+  final tmpLists = List<Object>.filled(chunkSize, []);
+  List<List<Object>> result = [];
+
+  for (int i = 0; i < input.length - 1; i = chunkSize + i) {
+    for (int k = 0; k < tmpLists.length; k++) {
+      tmpLists[k] = input[i + k];
+    }
+    result.add(tmpLists.toList());
+  }
+  return result;
+}
+
+enum ShowDialogCase { image, import, export, warning }
+
+showHint(String hint) {
+  Fluttertoast.showToast(
+      msg: hint,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.TOP_RIGHT,
+      timeInSecForIosWeb: 1,
+      backgroundColor: const Color.fromARGB(150, 0, 0, 0),
+      textColor: Colors.white,
+      fontSize: 16.0);
 }

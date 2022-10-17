@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:note_pass/utility/txt_riferimento.dart';
 import '../utility/db_helper.dart';
-import '../utility/notepass_routs.dart';
 import '../utility/shared_pref.dart' as sh;
 
 class ShowMeDialog {
@@ -81,20 +80,26 @@ class ShowMeDialog {
                       {DBhelper.collumsNames[1]: _input},
                       id,
                       DBhelper.collumsNames[0]);
-                  Navigator.of(context)
+                  Navigator.of(context).pop();
+                  /*Navigator.of(context)
+                      .pushNamedAndRemoveUntil(Routs().getrouts("pass"), (_) {
+                    return false;
+                  }, arguments: 'spmthing');*/
+                  /* Navigator.of(context)
                       .pushNamedAndRemoveUntil(Routs().getrouts("load"), (_) {
                     return false;
-                  });
+                  });*/
                 } else if (_hint != null && _input == null) {
                   DBhelper.updateRiga(
                       DBhelper.tableName,
                       {DBhelper.collumsNames[2]: _hint},
                       id,
                       DBhelper.collumsNames[0]);
-                  Navigator.of(context)
+                  Navigator.of(context).pop();
+                  /*Navigator.of(context)
                       .pushNamedAndRemoveUntil(Routs().getrouts("load"), (_) {
                     return false;
-                  });
+                  });*/
                 } else {
                   DBhelper.updateRiga(
                       DBhelper.tableName,
@@ -106,10 +111,11 @@ class ShowMeDialog {
                       {DBhelper.collumsNames[2]: _hint},
                       id,
                       DBhelper.collumsNames[0]);
-                  Navigator.of(context)
+                  Navigator.of(context).pop();
+                  /*Navigator.of(context)
                       .pushNamedAndRemoveUntil(Routs().getrouts("load"), (_) {
                     return false;
-                  });
+                  });*/
                 }
               },
             ),

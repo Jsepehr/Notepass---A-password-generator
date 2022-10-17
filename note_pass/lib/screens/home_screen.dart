@@ -5,7 +5,6 @@ import '../utility/utility_functions.dart';
 import '../utility/db_helper.dart';
 import 'package:flutter_screen_lock/flutter_screen_lock.dart';
 import 'package:local_auth/local_auth.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import '../utility/shared_pref.dart' as sh;
 
 class HomeScreen extends StatefulWidget {
@@ -48,16 +47,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   bool _giaEntrato = false;
-
-  showHint(String hint) {
-    Fluttertoast.showToast(
-        msg: hint,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: const Color.fromARGB(150, 0, 0, 0),
-        textColor: Colors.white,
-        fontSize: 16.0);
-  }
 
   List<Map<String, Object?>>? dataList;
 
@@ -120,11 +109,11 @@ class _HomeScreenState extends State<HomeScreen> {
       context,
       String direzione,
       List? listaDati,
-      String parilaChiaveFisso,
+      String parolaChiaveFisso,
     ) {
       screenLock(
         context: context,
-        correctString: parilaChiaveFisso,
+        correctString: parolaChiaveFisso,
         customizedButtonChild: const Icon(
           Icons.fingerprint,
         ),

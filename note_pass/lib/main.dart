@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 import './screens/home_screen.dart';
 import './utility/notepass_routs.dart';
 import './screens/about_screen.dart';
-import './screens/loading_screen.dart';
 import './utility/shared_pref.dart' as sh;
 
 Future main() async {
@@ -27,6 +26,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([
@@ -40,9 +40,8 @@ class _MyAppState extends State<MyApp> {
         routes: {
           '/': (context) => const HomeScreen(),
           Routs().getrouts("config"): (context) => const ConfigScreen(),
-          Routs().getrouts("pass"): (context) =>  PasswordsScreen(),
+          Routs().getrouts("pass"): (context) => PasswordsScreen(),
           Routs().getrouts("about"): (context) => const About(),
-          Routs().getrouts("load"): (context) => const Loading(),
         },
       ),
     );

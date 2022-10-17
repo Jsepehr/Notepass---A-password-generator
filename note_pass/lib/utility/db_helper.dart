@@ -8,19 +8,20 @@ class DBhelper with ChangeNotifier {
   static String dbName = "passdb2.db";
   static String tableName = "passes_db2";
   static List<String> collumsNames = ["id", "Corpo_P", "Hint_P", "used"];
-  
+
   static Future<sql.Database> database() async {
     final dbPath = await sql.getDatabasesPath();
     return await sql.openDatabase(path.join(dbPath, dbName),
         onCreate: (db, version) {
       return db.execute(
-          'CREATE TABLE IF NOT EXISTS $tableName (${collumsNames[0]} NTEGER, ${collumsNames[1]} TEXT, ${collumsNames[2]} TEXT, ${collumsNames[3]} Boolean)');
+          'CREATE TABLE IF NOT EXISTS $tableName (${collumsNames[0]} INTEGER, ${collumsNames[1]} TEXT, ${collumsNames[2]} TEXT, ${collumsNames[3]} Boolean)');
     }, version: 3);
   }
 
   static Future<void> insert(String table, Map<String, Object> data) async {
     final db = await DBhelper.database();
-    db.insert(table, data, conflictAlgorithm: sql.ConflictAlgorithm.replace);
+    print(
+        '${db.insert(table, data, conflictAlgorithm: sql.ConflictAlgorithm.replace)} insert result');
   }
 
   static Future<List<Map<String, Object?>>> getData() async {
@@ -50,7 +51,7 @@ class DBhelper with ChangeNotifier {
 
   static Future<List<Map<String, Object?>>> filterByHint(String str) async {
     final db = await DBhelper.database();
-    
+
     return db.query(tableName,
         columns: collumsNames,
         where: '${collumsNames[2]} LIKE ?',

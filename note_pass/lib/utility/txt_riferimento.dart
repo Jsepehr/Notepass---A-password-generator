@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:note_pass/utility/file_creation.dart';
 
 class Txtriferimenti {
   static const String _fixedString =
@@ -32,10 +33,39 @@ class Txtriferimenti {
   static const _avvisoGenPassIta =
       'Questa azione genererà un nuovo elenco di password. Le password salvate, se presenti, verranno eliminate.';
 
-  static const Text _descrizioneConfig = Text(
-    "1. Choose an image \n2. Type keywords \n3. Push the \"Generate\" button \nChoose an unique image and do not share it with anybody",
-    style: TextStyle(height: 1.5),
-  );
+  RichText descrizioneConfig(BuildContext context) => RichText(
+        text: TextSpan(
+          style: const TextStyle(color: Colors.black),
+          children: [
+            const TextSpan(
+                text:
+                    "1. Choose an image \n2. Type keywords \n3. Push the \"Generate\" button."),
+            const TextSpan(
+                style:
+                    TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
+                text:
+                    "\nChoose an unique image and do not share it with anybody!"),
+            const TextSpan(
+              text: '\n\nIgnore above steps by importing',
+            ),
+            const TextSpan(
+              style: TextStyle(fontWeight: FontWeight.bold),
+              text: ' "Notepass_pwdc**.txt" file.',
+            ),
+            WidgetSpan(
+              child: Align(
+                alignment: Alignment.center,
+                child: TextButton.icon(
+                    label: const Text('Import'),
+                    icon: const Icon(Icons.touch_app),
+                    onPressed: () {
+                      FileCreation().readContentAndRightToDB(context);
+                    }),
+              ),
+            ),
+          ],
+        ),
+      );
   static const Text _descrizioneConfigIta = Text(
     "1. Scegli un'immagine \n2. Digita le parole chiave \n3. Premi \"Crea\" \nScegli un'immagine unica e non condividerla con nessuno",
     style: TextStyle(height: 1.5),
@@ -275,7 +305,7 @@ Quindi l'utente può rigenerare sempre lo stesso elenco di password inserendo la
         return _descrizioneConfigIta;
 
       case "eng":
-        return _descrizioneConfig;
+      //return _descrizioneConfig;
     }
   }
 

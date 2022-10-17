@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:note_pass/widgets/shared_widgets/floating_button.dart';
 import '../utility/txt_riferimento.dart';
 import '../utility/utility_functions.dart';
 import 'package:image_picker/image_picker.dart';
@@ -69,16 +70,11 @@ class _ConfigScreenState extends State<ConfigScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false, // fluter 1.x// fluter 2.x
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).pushNamedAndRemoveUntil("/", (_) {
-            return false;
-          }, arguments: Args(null, null, "pass"));
-        },
-        child: const Icon(Icons.home),
-      ),
+      floatingActionButton: const NotePassFloatingActionBtn(strVar: "pass"),
       appBar: AppBar(
-        title: Text(Txtriferimenti().getTxtTestata("config")),
+        title: Text(
+          Txtriferimenti().getTxtTestata("config"),
+        ),
       ),
       body: SingleChildScrollView(
         child: Center(
@@ -101,10 +97,10 @@ class _ConfigScreenState extends State<ConfigScreen> {
                       width: 2.0,
                     ),
                   ),
-                  child: Txtriferimenti().getTxtDesLangConfig(linguaggio),
+                  child: Txtriferimenti().descrizioneConfig(context),
                 ),
                 const SizedBox(
-                  height: 70.0,
+                  height: 30.0,
                 ),
                 OutlinedButton(
                   // image button---------------------------------------------------
@@ -133,11 +129,9 @@ class _ConfigScreenState extends State<ConfigScreen> {
                         borderSide: BorderSide(
                             color: _nullOrNotStr ? Colors.blue : Colors.red)),
                     labelText: Txtriferimenti().getTxtInputTestata(
-                            sh.SharedPref.getStatoDelVar() ??
-                        "eng"),
-                    hintText: Txtriferimenti()
-                            .getTxtInputHint(sh.SharedPref.getStatoDelVar() ??
-                        "eng"),
+                        sh.SharedPref.getStatoDelVar() ?? "eng"),
+                    hintText: Txtriferimenti().getTxtInputHint(
+                        sh.SharedPref.getStatoDelVar() ?? "eng"),
                     // Here is key idea
                     suffixIcon: IconButton(
                       icon: Icon(
@@ -157,7 +151,7 @@ class _ConfigScreenState extends State<ConfigScreen> {
                   ),
                 ),
                 const SizedBox(
-                  height: 60.0,
+                  height: 40.0,
                 ),
                 ElevatedButton(
                   //generate button ------------------------------------------
@@ -175,7 +169,8 @@ class _ConfigScreenState extends State<ConfigScreen> {
                       setState(() {
                         _nullOrNotStr = true;
                       });
-                      showMyDialog(context, _imgHash, _strHash);
+                      showMyDialog(
+                          context, ShowDialogCase.image, _imgHash, _strHash);
                     }
                   },
                   child: Padding(
