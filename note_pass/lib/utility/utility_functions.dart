@@ -258,3 +258,7 @@ showHint(String hint) {
       textColor: Colors.white,
       fontSize: 16.0);
 }
+
+class NotePassColors {
+  static Color descriptionBg = const Color.fromARGB(255, 219, 239, 255);
+}

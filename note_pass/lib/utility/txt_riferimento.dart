@@ -62,9 +62,9 @@ class Txtriferimenti {
 
   //export text
   static String strExportEng =
-      'The passwords including comments will save in your divice Downloads folder with name "Notepass_pwdc**.txt"';
+      'The passwords and comments will be saved in your divice\'s Downloads folder with name "Notepass_pwdc**.txt"';
   static String strExportIta =
-      'Le password, inclusi i commenti, verranno salvate nella cartella Download del dispositivo con il nome "Notepass_pwdc**.txt"';
+      'Le password e i commenti verranno salvate nella cartella Download del tuo dispositivo con il nome "Notepass_pwdc**.txt"';
   //expor title
   static String strExportTitleEng = 'Saving passwords';
   static String strExportTitleIta = 'Salvataggio delle password';
@@ -82,7 +82,7 @@ class Txtriferimenti {
           String str2, String str3, String str4, String str5) =>
       RichText(
         text: TextSpan(
-          style: const TextStyle(color: Colors.black),
+          style: const TextStyle(color: Colors.black, height: 1.5),
           children: [
             TextSpan(text: str1),
             TextSpan(
@@ -180,13 +180,14 @@ class Txtriferimenti {
   static const String _pchiaveHintEng = "Keywords here ...";
   static const String _pchiaveHintIta = "Parole chiavi qui ...";
 
-  static const String _aboutEng = """Hi, I am Sepehr, creator of Notepass. 
+  static const String _aboutEng = """Hi, I am Sepehr, the creator of Notepass. 
 Remembering and managing complex passwords has always been a problem for me, 
 so I had the idea of using images as useful elements to generate strong and secure passwords. Images are much easier to remember than a complicated set of letters and numbers. 
 \nIn Notepass app, passwords are created based on image and the keyword entered by the user in configurations section.
 Therefore the user can always regenerate the same password list by inserting the same image and the same keywords used previously.
 """;
-  static const String _aboutIta = """Ciao, sono Sepehr, creatore di Notepass. 
+  static const String _aboutIta =
+      """Ciao, sono Sepehr, il creatore di Notepass. 
 Ricordare e gestire le password efficaci è sempre stato un problema per me, così ho avuto l'idea di sfruttare le immagini come elementi utili per generare password efficaci e sicure. Infatti le immagini sono molto più facili da ricordare rispetto ad un insieme complicato di lettere e numeri.
 \nNotepass genera una serie di password complesse e uniche. Le password vengono create in base all'immagine e alla parola chiave inserite dall'utente nella sezione "configurazioni".
 Quindi l'utente può rigenerare sempre lo stesso elenco di password inserendo la stessa immagine e le stesse parole chiavi usate precedentemente.""";

@@ -94,129 +94,109 @@ class _ConfigScreenState extends State<ConfigScreen> {
           Txtriferimenti().getTxtTestata("config"),
         ),
       ),
-      body: Stack(
-        children: [
-          Container(
-            height: double.infinity,
-            width: double.infinity,
-            foregroundDecoration: const BoxDecoration(
-              //color: Colors.amber,
-              image: DecorationImage(
-                image: AssetImage("dev_assets/lucchettoBg.jpg"),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-          SingleChildScrollView(
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Card(
-                      elevation: 0,
-                      color: const Color.fromARGB(213, 219, 239, 255),
-                      child: Padding(
-                        padding: const EdgeInsets.all(20.0),
-                        child: Txtriferimenti.descrizioneConfig(
-                            context, str1, str2, str3, str5, str4),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 30.0,
-                    ),
-                    OutlinedButton(
-                      // image button---------------------------------------------------
-                      style: OutlinedButton.styleFrom(
-                        side: borderColor(_selColor),
-                      ),
-                      onPressed: () {
-                        _imgHash = getPicHash().toString();
-                      },
-                      child: Text(
-                        Txtriferimenti().getTxtImmage(linguaggio),
-                        style: txtColor(_selColor),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 5.0,
-                    ),
-                    TextFormField(
-                      //keyword input---------------------------------------------------
-                      keyboardType: TextInputType.text,
-                      controller: _userPasswordController,
-                      obscureText: !_passwordVisible,
-                      //This will obscure text dynamically
-                      decoration: InputDecoration(
-                        enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                                color:
-                                    _nullOrNotStr ? Colors.blue : Colors.red)),
-                        labelText: Txtriferimenti().getTxtInputTestata(
-                            sh.SharedPref.getStatoDelVar() ?? "eng"),
-                        hintText: Txtriferimenti().getTxtInputHint(
-                            sh.SharedPref.getStatoDelVar() ?? "eng"),
-                        // Here is key idea
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            // Based on passwordVisible state choose the icon
-                            _passwordVisible
-                                ? Icons.visibility
-                                : Icons.visibility_off,
-                            color: Theme.of(context).primaryColorDark,
-                          ),
-                          onPressed: () {
-                            // Update the state i.e. toogle the state of passwordVisible variable
-                            setState(() {
-                              _passwordVisible = !_passwordVisible;
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 40.0,
-                    ),
-                    ElevatedButton(
-                      //generate button ------------------------------------------
-                      onPressed: () {
-                        _strHash =
-                            generateStringHash(_userPasswordController.text);
-                        if (_imgHash == null) {
-                          setState(() {
-                            _selColor = 0;
-                          });
-                        } else if (_strHash == null) {
-                          setState(() {
-                            _nullOrNotStr = false;
-                          });
-                        } else {
-                          setState(() {
-                            _nullOrNotStr = true;
-                          });
-                          showMyDialog(context, ShowDialogCase.image, _imgHash,
-                              _strHash);
-                        }
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                        child: Text(
-                          Txtriferimenti().getTxtDone(linguaggio),
-                        ),
-                      ),
-                    ),
-                  ],
+      body: SingleChildScrollView(
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                Card(
+                  elevation: 1,
+                  color: NotePassColors.descriptionBg,
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Txtriferimenti.descrizioneConfig(
+                        context, str1, str2, str3, str5, str4),
+                  ),
                 ),
-              ),
+                const SizedBox(
+                  height: 30.0,
+                ),
+                OutlinedButton(
+                  // image button---------------------------------------------------
+                  style: OutlinedButton.styleFrom(
+                    side: borderColor(_selColor),
+                  ),
+                  onPressed: () {
+                    _imgHash = getPicHash().toString();
+                  },
+                  child: Text(
+                    Txtriferimenti().getTxtImmage(linguaggio),
+                    style: txtColor(_selColor),
+                  ),
+                ),
+                const SizedBox(
+                  height: 5.0,
+                ),
+                TextFormField(
+                  //keyword input---------------------------------------------------
+                  keyboardType: TextInputType.text,
+                  controller: _userPasswordController,
+                  obscureText: !_passwordVisible,
+                  //This will obscure text dynamically
+                  decoration: InputDecoration(
+                    enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                            color: _nullOrNotStr ? Colors.blue : Colors.red)),
+                    labelText: Txtriferimenti().getTxtInputTestata(
+                        sh.SharedPref.getStatoDelVar() ?? "eng"),
+                    hintText: Txtriferimenti().getTxtInputHint(
+                        sh.SharedPref.getStatoDelVar() ?? "eng"),
+                    // Here is key idea
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        // Based on passwordVisible state choose the icon
+                        _passwordVisible
+                            ? Icons.visibility
+                            : Icons.visibility_off,
+                        color: Theme.of(context).primaryColorDark,
+                      ),
+                      onPressed: () {
+                        // Update the state i.e. toogle the state of passwordVisible variable
+                        setState(() {
+                          _passwordVisible = !_passwordVisible;
+                        });
+                      },
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 40.0,
+                ),
+                ElevatedButton(
+                  //generate button ------------------------------------------
+                  onPressed: () {
+                    _strHash = generateStringHash(_userPasswordController.text);
+                    if (_imgHash == null) {
+                      setState(() {
+                        _selColor = 0;
+                      });
+                    } else if (_strHash == null) {
+                      setState(() {
+                        _nullOrNotStr = false;
+                      });
+                    } else {
+                      setState(() {
+                        _nullOrNotStr = true;
+                      });
+                      showMyDialog(
+                          context, ShowDialogCase.image, _imgHash, _strHash);
+                    }
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: Text(
+                      Txtriferimenti().getTxtDone(linguaggio),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }
