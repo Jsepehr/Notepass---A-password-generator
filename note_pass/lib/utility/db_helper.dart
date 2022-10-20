@@ -1,10 +1,10 @@
 // ignore_for_file: depend_on_referenced_packages
 
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart' as sql;
 import "package:path/path.dart" as path;
 
-class DBhelper with ChangeNotifier {
+class DBhelper {
   static String dbName = "passdb2.db";
   static String tableName = "passes_db2";
   static List<String> collumsNames = ["id", "Corpo_P", "Hint_P", "used"];
@@ -20,7 +20,7 @@ class DBhelper with ChangeNotifier {
 
   static Future<void> insert(String table, Map<String, Object> data) async {
     final db = await DBhelper.database();
-    print(
+    debugPrint(
         '${db.insert(table, data, conflictAlgorithm: sql.ConflictAlgorithm.replace)} insert result');
   }
 
@@ -51,7 +51,6 @@ class DBhelper with ChangeNotifier {
 
   static Future<List<Map<String, Object?>>> filterByHint(String str) async {
     final db = await DBhelper.database();
-
     return db.query(tableName,
         columns: collumsNames,
         where: '${collumsNames[2]} LIKE ?',

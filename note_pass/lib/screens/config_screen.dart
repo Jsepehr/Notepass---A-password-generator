@@ -67,123 +67,156 @@ class _ConfigScreenState extends State<ConfigScreen> {
 
   @override
   Widget build(BuildContext context) {
+    String lingua = sh.SharedPref.getStatoDelVar() ?? 'eng';
+    String str1 = lingua == 'eng'
+        ? Txtriferimenti.strConf1Eng
+        : Txtriferimenti.strConf1Ita;
+    String str2 = lingua == 'eng'
+        ? Txtriferimenti.strConf2Eng
+        : Txtriferimenti.strConf2Ita;
+    String str3 = lingua == 'eng'
+        ? Txtriferimenti.strConf3Eng
+        : Txtriferimenti.strConf3Ita;
+    String str4 = lingua == 'eng'
+        ? Txtriferimenti.strConf4Eng
+        : Txtriferimenti.strConf4Ita;
+    String str5 = lingua == 'eng'
+        ? Txtriferimenti.strConf5Eng
+        : Txtriferimenti.strConf5Ita;
     return Scaffold(
-      resizeToAvoidBottomInset: false, // fluter 1.x// fluter 2.x
+      resizeToAvoidBottomInset: true, // fluter 1.x// fluter 2.x
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: const NotePassFloatingActionBtn(strVar: "pass"),
+      floatingActionButton: MediaQuery.of(context).viewInsets.bottom == 0
+          ? const NotePassFloatingActionBtn(strVar: "pass")
+          : Container(),
       appBar: AppBar(
         title: Text(
           Txtriferimenti().getTxtTestata("config"),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              children: <Widget>[
-                const SizedBox(
-                  height: 20,
-                ),
-                Container(
-                  padding: const EdgeInsets.all(20.0),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.0),
-                    border: Border.all(
-                      color: Colors.grey,
-                      width: 2.0,
-                    ),
-                  ),
-                  child: Txtriferimenti().descrizioneConfig(context),
-                ),
-                const SizedBox(
-                  height: 30.0,
-                ),
-                OutlinedButton(
-                  // image button---------------------------------------------------
-                  style: OutlinedButton.styleFrom(
-                    side: borderColor(_selColor),
-                  ),
-                  onPressed: () {
-                    _imgHash = getPicHash().toString();
-                  },
-                  child: Text(
-                    Txtriferimenti().getTxtImmage(linguaggio),
-                    style: txtColor(_selColor),
-                  ),
-                ),
-                const SizedBox(
-                  height: 5.0,
-                ),
-                TextFormField(
-                  //keyword input---------------------------------------------------
-                  keyboardType: TextInputType.text,
-                  controller: _userPasswordController,
-                  obscureText: !_passwordVisible,
-                  //This will obscure text dynamically
-                  decoration: InputDecoration(
-                    enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                            color: _nullOrNotStr ? Colors.blue : Colors.red)),
-                    labelText: Txtriferimenti().getTxtInputTestata(
-                        sh.SharedPref.getStatoDelVar() ?? "eng"),
-                    hintText: Txtriferimenti().getTxtInputHint(
-                        sh.SharedPref.getStatoDelVar() ?? "eng"),
-                    // Here is key idea
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        // Based on passwordVisible state choose the icon
-                        _passwordVisible
-                            ? Icons.visibility
-                            : Icons.visibility_off,
-                        color: Theme.of(context).primaryColorDark,
-                      ),
-                      onPressed: () {
-                        // Update the state i.e. toogle the state of passwordVisible variable
-                        setState(() {
-                          _passwordVisible = !_passwordVisible;
-                        });
-                      },
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 40.0,
-                ),
-                ElevatedButton(
-                  //generate button ------------------------------------------
-                  onPressed: () {
-                    _strHash = generateStringHash(_userPasswordController.text);
-                    if (_imgHash == null) {
-                      setState(() {
-                        _selColor = 0;
-                      });
-                    } else if (_strHash == null) {
-                      setState(() {
-                        _nullOrNotStr = false;
-                      });
-                    } else {
-                      setState(() {
-                        _nullOrNotStr = true;
-                      });
-                      showMyDialog(
-                          context, ShowDialogCase.image, _imgHash, _strHash);
-                    }
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    child: Text(
-                      Txtriferimenti().getTxtDone(linguaggio),
-                    ),
-                  ),
-                ),
-              ],
+      body: Stack(
+        children: [
+          Container(
+            height: double.infinity,
+            width: double.infinity,
+            foregroundDecoration: const BoxDecoration(
+              //color: Colors.amber,
+              image: DecorationImage(
+                image: AssetImage("dev_assets/lucchettoBg.jpg"),
+                fit: BoxFit.cover,
+              ),
             ),
           ),
-        ),
+          SingleChildScrollView(
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  children: <Widget>[
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Card(
+                      elevation: 0,
+                      color: const Color.fromARGB(213, 219, 239, 255),
+                      child: Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: Txtriferimenti.descrizioneConfig(
+                            context, str1, str2, str3, str5, str4),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 30.0,
+                    ),
+                    OutlinedButton(
+                      // image button---------------------------------------------------
+                      style: OutlinedButton.styleFrom(
+                        side: borderColor(_selColor),
+                      ),
+                      onPressed: () {
+                        _imgHash = getPicHash().toString();
+                      },
+                      child: Text(
+                        Txtriferimenti().getTxtImmage(linguaggio),
+                        style: txtColor(_selColor),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 5.0,
+                    ),
+                    TextFormField(
+                      //keyword input---------------------------------------------------
+                      keyboardType: TextInputType.text,
+                      controller: _userPasswordController,
+                      obscureText: !_passwordVisible,
+                      //This will obscure text dynamically
+                      decoration: InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                                color:
+                                    _nullOrNotStr ? Colors.blue : Colors.red)),
+                        labelText: Txtriferimenti().getTxtInputTestata(
+                            sh.SharedPref.getStatoDelVar() ?? "eng"),
+                        hintText: Txtriferimenti().getTxtInputHint(
+                            sh.SharedPref.getStatoDelVar() ?? "eng"),
+                        // Here is key idea
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            // Based on passwordVisible state choose the icon
+                            _passwordVisible
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                            color: Theme.of(context).primaryColorDark,
+                          ),
+                          onPressed: () {
+                            // Update the state i.e. toogle the state of passwordVisible variable
+                            setState(() {
+                              _passwordVisible = !_passwordVisible;
+                            });
+                          },
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 40.0,
+                    ),
+                    ElevatedButton(
+                      //generate button ------------------------------------------
+                      onPressed: () {
+                        _strHash =
+                            generateStringHash(_userPasswordController.text);
+                        if (_imgHash == null) {
+                          setState(() {
+                            _selColor = 0;
+                          });
+                        } else if (_strHash == null) {
+                          setState(() {
+                            _nullOrNotStr = false;
+                          });
+                        } else {
+                          setState(() {
+                            _nullOrNotStr = true;
+                          });
+                          showMyDialog(context, ShowDialogCase.image, _imgHash,
+                              _strHash);
+                        }
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        child: Text(
+                          Txtriferimenti().getTxtDone(linguaggio),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

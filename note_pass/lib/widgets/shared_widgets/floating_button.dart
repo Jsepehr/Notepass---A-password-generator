@@ -13,7 +13,7 @@ class NotePassFloatingActionBtn extends StatelessWidget {
   Widget build(BuildContext context) {
     return FloatingActionButton(
       elevation: 2,
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.blue[50],
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(50),

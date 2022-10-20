@@ -10,11 +10,13 @@ class Loading extends StatefulWidget {
 class _LoadingState extends State<Loading> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      backgroundColor: Colors.blue,
-      body: CircularProgressIndicator(
-        color: Colors.white,
-      ),
-    );
+    return SizedBox(
+        height: MediaQuery.of(context).size.height * 0.75,
+        child: const Center(
+          child: CircularProgressIndicator(
+            backgroundColor: Colors.blue,
+            color: Colors.white,
+          ),
+        ));
   }
 }

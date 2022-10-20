@@ -135,146 +135,168 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: Text(Txtriferimenti().getTxtTestata("home")),
       ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text("Eng"),
-                    Radio<String>(
-                        value: "eng",
-                        groupValue: lingua,
-                        onChanged: (value) async {
-                          await sh.SharedPref.setStatoDelVar("eng");
-                          setState(() {
-                            lingua = sh.SharedPref.getStatoDelVar() ?? "eng";
-                            linguaggio =
-                                sh.SharedPref.getStatoDelVar() ?? "eng";
-                          });
-                        }),
-                    const Text("Ita"),
-                    Radio<String>(
-                        value: "ita",
-                        groupValue: lingua,
-                        onChanged: (value) async {
-                          await sh.SharedPref.setStatoDelVar("ita");
-                          setState(() {
-                            lingua = sh.SharedPref.getStatoDelVar() ?? "ita";
-                            linguaggio =
-                                sh.SharedPref.getStatoDelVar() ?? "ita";
-                          });
-                        }),
-                  ],
-                ),
-                const SizedBox(height: 1),
-                Container(
-                  padding: const EdgeInsets.all(20.0),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10.0),
-                      border: Border.all(
-                        color: Colors.grey,
-                        width: 2.0,
-                      )),
-                  child: Txtriferimenti().getTxtDesLangHome(linguaggio),
-                ),
-                const SizedBox(
-                  height: 90.0,
-                ),
-                OutlinedButton(
-                  style: OutlinedButton.styleFrom(
-                    side: colors
-                        ? const BorderSide(color: Colors.blue)
-                        : const BorderSide(
-                            color: Color.fromARGB(255, 218, 218, 218)),
-                  ),
-                  onPressed: () {
-                    if (_giaEntrato == false) {
-                      DBhelper.updateRiga(
-                          DBhelper.tableName,
-                          {DBhelper.collumsNames[3]: 0},
-                          1,
-                          DBhelper.collumsNames[3]);
-                      screenLockWapper(context, "config", null, '7777');
-                    } else {
-                      Navigator.of(context).pushNamedAndRemoveUntil(
-                          Routs().getrouts("config"), (_) {
-                        return false;
-                      });
-                    }
-                  },
-                  child: Text(
-                    Txtriferimenti().getTxtConfiguration(linguaggio),
-                    style: TextStyle(
-                        color: !colors
-                            ? const Color.fromARGB(255, 218, 218, 218)
-                            : Colors.blue),
-                  ),
-                ),
-                const SizedBox(
-                  height: 25.0,
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    if (dataList!.isEmpty) {
-                      if (_giaEntrato == false) {
-                        DBhelper.updateRiga(
-                            DBhelper.tableName,
-                            {DBhelper.collumsNames[3]: 0},
-                            1,
-                            DBhelper.collumsNames[3]);
-                        screenLockWapper(context, "config", null, '7777');
-                      } else {
-                        Navigator.of(context).pushNamedAndRemoveUntil(
-                            Routs().getrouts("config"), (_) {
-                          return false;
-                        });
-                      }
-                    } else if (dataList!.isNotEmpty) {
-                      if (_giaEntrato == false) {
-                        DBhelper.updateRiga(
-                            DBhelper.tableName,
-                            {DBhelper.collumsNames[3]: 0},
-                            1,
-                            DBhelper.collumsNames[3]);
-                        screenLockWapper(context, "pass", dataList, '7777');
-                      } else {
-                        Navigator.of(context).pushNamedAndRemoveUntil(
-                            Routs().getrouts("pass"), (_) {
-                          return false;
-                        }, arguments: dataList);
-                      }
-                    }
-                  },
-                  style: ButtonStyle(
-                      backgroundColor: colors
-                          ? MaterialStateProperty.all(
-                              const Color.fromARGB(255, 234, 234, 234))
-                          : MaterialStateProperty.all(Colors.blue)),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    child: Text(
-                      Txtriferimenti().getTxtPwd(),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 100,
-                ),
-                TextButton(
-                    onPressed: () => Navigator.of(context)
-                        .pushNamed(Routs().getrouts("about")),
-                    child: const Text("About")),
-              ],
+      body: Stack(
+        children: [
+          Container(
+            height: double.infinity,
+            width: double.infinity,
+            foregroundDecoration: const BoxDecoration(
+              //color: Colors.amber,
+              image: DecorationImage(
+                image: AssetImage("dev_assets/lucchettoBg.jpg"),
+                fit: BoxFit.cover,
+              ),
             ),
           ),
-        ),
+          SingleChildScrollView(
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  children: <Widget>[
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text("Eng"),
+                        Radio<String>(
+                            value: "eng",
+                            groupValue: lingua,
+                            onChanged: (value) async {
+                              await sh.SharedPref.setStatoDelVar("eng");
+                              setState(() {
+                                lingua =
+                                    sh.SharedPref.getStatoDelVar() ?? "eng";
+                                linguaggio =
+                                    sh.SharedPref.getStatoDelVar() ?? "eng";
+                              });
+                            }),
+                        const Text("Ita"),
+                        Radio<String>(
+                            value: "ita",
+                            groupValue: lingua,
+                            onChanged: (value) async {
+                              await sh.SharedPref.setStatoDelVar("ita");
+                              setState(() {
+                                lingua =
+                                    sh.SharedPref.getStatoDelVar() ?? "ita";
+                                linguaggio =
+                                    sh.SharedPref.getStatoDelVar() ?? "ita";
+                              });
+                            }),
+                      ],
+                    ),
+                    const SizedBox(height: 15),
+                    Card(
+                      elevation: 0,
+                      color: const Color.fromARGB(213, 219, 239, 255),
+                      child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 20, horizontal: 20),
+                          child:
+                              Txtriferimenti().getTxtDesLangHome(linguaggio)),
+                    ),
+                    const SizedBox(
+                      height: 90.0,
+                    ),
+                    OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                        side: colors
+                            ? const BorderSide(color: Colors.blue)
+                            : const BorderSide(
+                                color: Color.fromARGB(255, 173, 173, 173)),
+                      ),
+                      onPressed: () {
+                        if (_giaEntrato == false) {
+                          DBhelper.updateRiga(
+                              DBhelper.tableName,
+                              {DBhelper.collumsNames[3]: 0},
+                              1,
+                              DBhelper.collumsNames[3]);
+                          screenLockWapper(context, "config", null, '7777');
+                        } else {
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                              Routs().getrouts("config"), (_) {
+                            return false;
+                          });
+                        }
+                      },
+                      child: Text(
+                        Txtriferimenti().getTxtConfiguration(linguaggio),
+                        style: TextStyle(
+                            color: !colors
+                                ? const Color.fromARGB(255, 173, 173, 173)
+                                : Colors.blue),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 25.0,
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        if (dataList!.isEmpty) {
+                          if (_giaEntrato == false) {
+                            DBhelper.updateRiga(
+                                DBhelper.tableName,
+                                {DBhelper.collumsNames[3]: 0},
+                                1,
+                                DBhelper.collumsNames[3]);
+                            screenLockWapper(context, "config", null, '7777');
+                          } else {
+                            Navigator.of(context).pushNamedAndRemoveUntil(
+                                Routs().getrouts("config"), (_) {
+                              return false;
+                            });
+                          }
+                        } else if (dataList!.isNotEmpty) {
+                          if (_giaEntrato == false) {
+                            DBhelper.updateRiga(
+                                DBhelper.tableName,
+                                {DBhelper.collumsNames[3]: 0},
+                                1,
+                                DBhelper.collumsNames[3]);
+                            screenLockWapper(context, "pass", dataList, '7777');
+                          } else {
+                            Navigator.of(context).pushNamedAndRemoveUntil(
+                                Routs().getrouts("pass"), (_) {
+                              return false;
+                            }, arguments: dataList);
+                          }
+                        }
+                      },
+                      style: ButtonStyle(
+                          backgroundColor: colors
+                              ? MaterialStateProperty.all(
+                                  const Color.fromARGB(255, 234, 234, 234))
+                              : MaterialStateProperty.all(Colors.blue)),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        child: Text(
+                          Txtriferimenti().getTxtPwd(),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 100,
+                    ),
+                    TextButton(
+                        onPressed: () => Navigator.of(context)
+                            .pushNamed(Routs().getrouts("about")),
+                        child: const Text(
+                          "About",
+                          style: TextStyle(fontSize: 16),
+                        )),
+                  ],
+                ),
+              ),
+            ),
+          )
+        ],
       ),
     );
   }

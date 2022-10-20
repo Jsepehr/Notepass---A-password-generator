@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:note_pass/screens/config_screen.dart';
-import 'package:note_pass/screens/loading_screen.dart';
 import 'package:note_pass/screens/passwords_screen.dart';
 import 'package:flutter/services.dart';
+import 'package:note_pass/utility/passwords_provider.dart';
 import 'package:provider/provider.dart';
 import './screens/home_screen.dart';
 import './utility/notepass_routs.dart';
@@ -34,13 +34,14 @@ class _MyAppState extends State<MyApp> {
     ]);
 
     return ChangeNotifierProvider(
-      create: (context) => PasswordsScreen(),
+      create: (context) => Passwords(),
       child: MaterialApp(
+        
         debugShowCheckedModeBanner: false,
         routes: {
           '/': (context) => const HomeScreen(),
           Routs().getrouts("config"): (context) => const ConfigScreen(),
-          Routs().getrouts("pass"): (context) => PasswordsScreen(),
+          Routs().getrouts("pass"): (context) => const PasswordsScreen(),
           Routs().getrouts("about"): (context) => const About(),
         },
       ),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:note_pass/screens/loading_screen.dart';
 import 'package:share/share.dart';
 import '../widgets/dialog_edit.dart';
 import '../utility/shared_pref.dart' as sh;
@@ -39,6 +38,9 @@ class _UnPasswordState extends State<UnPassword> {
 
   @override
   Widget build(BuildContext context) {
+    String comment = sh.SharedPref.getStatoDelVar() == 'eng'
+        ? Txtriferimenti().getTxtHint('eng')
+        : Txtriferimenti().getTxtHint('ita');
     return Center(
       child: Card(
         elevation: 0,
@@ -46,14 +48,15 @@ class _UnPasswordState extends State<UnPassword> {
           children: <Widget>[
             Stack(children: [
               Positioned(
-                  left: 10,
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 10),
-                    child: Text(
-                      widget._hint.isNotEmpty ? widget._hint : 'Comment',
-                      style: TextStyle(color: Colors.grey.shade500),
-                    ),
-                  )),
+                left: 10,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: Text(
+                    widget._hint.isNotEmpty ? widget._hint : comment,
+                    style: TextStyle(color: Colors.grey.shade500),
+                  ),
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.only(top: 15, left: 10, right: 10),
                 child: TextFormField(

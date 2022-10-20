@@ -3,13 +3,21 @@ import 'package:android_path_provider/android_path_provider.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
+import 'package:note_pass/utility/txt_riferimento.dart';
 import 'package:note_pass/utility/utility_functions.dart';
 import 'package:note_pass/widgets/dialog.dart';
 import 'package:permission_handler/permission_handler.dart';
+import '../utility/shared_pref.dart' as sh;
 
 import 'db_helper.dart';
 
 class FileCreation {
+  String hintSaved = sh.SharedPref.getStatoDelVar() == 'eng'
+      ? Txtriferimenti.strHintEng
+      : Txtriferimenti.strHintIta;
+  String hintReady = sh.SharedPref.getStatoDelVar() == 'eng'
+      ? Txtriferimenti.strHintGenEng
+      : Txtriferimenti.strHintGenIta;
   List<PwdEnt> pwdList = [];
   Future<bool> _requestPermission(Permission permission) async {
     if (await permission.isGranted) {
@@ -49,6 +57,7 @@ class FileCreation {
           '${element['Hint_P'] == '' ? 'vuoto' : element['Hint_P']}<|||>${element['Corpo_P']}<|||>';
     }
     file.writeAsString(result);
+    showHint(hintSaved);
   }
 
   void readContentAndRightToDB(BuildContext c) async {
@@ -59,7 +68,6 @@ class FileCreation {
     final file = result.files;
     int i = 0;
     String fileName = file[0].name;
-    print(fileName);
     RegExp exp = RegExp(r'Notepass_pwdc\d{5,}\.txt');
     if (file[0].extension! == 'txt' && exp.firstMatch(fileName) != null) {
       var myFile = await File(file[0].path!).readAsString();
@@ -80,7 +88,12 @@ class FileCreation {
           "Corpo_p": element.pwd,
           "Hint_p": element.hint,
           "used": element.flag
-        }).then((value) => showHint('passwrds are ready.'));
+        }).then((value) {
+          showHint(hintReady);
+          Navigator.of(c).pushNamedAndRemoveUntil("/", (_) {
+            return false;
+          }, arguments: Args(null, null, "pass"));
+        });
       }
     } else {
       // ignore: use_build_context_synchronously

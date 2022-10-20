@@ -217,7 +217,8 @@ class PwdEnt {
   final int _flagUsed;
   final Function? _fun;
 
-  PwdEnt({required passId, required corpo, required hint, required flagUsed, fun})
+  PwdEnt(
+      {required passId, required corpo, required hint, required flagUsed, fun})
       : _pwdId = passId,
         _pwdCorpo = corpo,
         _pwdHint = hint,
@@ -251,7 +252,7 @@ showHint(String hint) {
   Fluttertoast.showToast(
       msg: hint,
       toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.TOP_RIGHT,
+      gravity: ToastGravity.BOTTOM,
       timeInSecForIosWeb: 1,
       backgroundColor: const Color.fromARGB(150, 0, 0, 0),
       textColor: Colors.white,

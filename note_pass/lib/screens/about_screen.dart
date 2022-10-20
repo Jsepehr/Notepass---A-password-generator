@@ -13,27 +13,38 @@ class About extends StatelessWidget {
       appBar: AppBar(
         title: Text(Txtriferimenti().getTxtTestata("about")),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 50),
-          child: Column(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(20.0),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.0),
-                    border: Border.all(
-                      color: Colors.grey,
-                      width: 2.0,
-                    )),
-                child: Text(
-                  Txtriferimenti().getTxtAbout(linguaggio),
-                  style: const TextStyle(fontSize: 16, height: 1.3),
+      body: Stack(
+        alignment: AlignmentDirectional.center,
+        children: [
+          Container(
+            height: double.infinity,
+            width: double.infinity,
+            foregroundDecoration: const BoxDecoration(
+              //color: Colors.amber,
+              image: DecorationImage(
+                image: AssetImage("dev_assets/lucchettoBg.jpg"),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 50),
+              child: Card(
+                elevation: 0,
+                color: const Color.fromARGB(115, 219, 239, 255),
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                  child: Text(
+                    Txtriferimenti().getTxtAbout(linguaggio),
+                    style: const TextStyle(fontSize: 16, height: 1.3),
+                  ),
                 ),
               ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
