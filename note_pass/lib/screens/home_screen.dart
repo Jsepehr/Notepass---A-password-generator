@@ -6,6 +6,7 @@ import '../utility/db_helper.dart';
 import 'package:flutter_screen_lock/flutter_screen_lock.dart';
 import 'package:local_auth/local_auth.dart';
 import '../utility/shared_pref.dart' as sh;
+import 'package:url_launcher/url_launcher.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -16,6 +17,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   bool colors = false;
+
   @override
   void initState() {
     linguaggio = sh.SharedPref.getStatoDelVar() ?? 'eng';
@@ -43,6 +45,13 @@ class _HomeScreenState extends State<HomeScreen> {
           (_) {
         return false;
       }, arguments: data);
+    }
+  }
+
+  final Uri _url = Uri.parse('https://www.youtube.com/watch?v=gbT-1kaqTXI');
+  Future<void> _launchUrl() async {
+    if (!await launchUrl(_url)) {
+      showHint('Somthing went wrong');
     }
   }
 
@@ -280,8 +289,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                     TextButton(
-                      onPressed: () => Navigator.of(context)
-                          .pushNamed(Routs().getrouts("about")),
+                      onPressed: () => _launchUrl(),
                       child: const Text(
                         "Tutorial",
                         style: TextStyle(fontSize: 16),

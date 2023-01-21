@@ -13,7 +13,7 @@ Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   //sh.SharedPref.init();
   await sh.SharedPref.init();
-
+  sh.SharedPref.setStatoDelVar('eng');
   runApp(const MyApp());
 }
 
@@ -36,7 +36,6 @@ class _MyAppState extends State<MyApp> {
     return ChangeNotifierProvider(
       create: (context) => Passwords(),
       child: MaterialApp(
-        
         debugShowCheckedModeBanner: false,
         routes: {
           '/': (context) => const HomeScreen(),

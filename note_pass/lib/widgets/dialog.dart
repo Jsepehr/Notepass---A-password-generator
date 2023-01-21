@@ -5,6 +5,7 @@ import '../utility/utility_functions.dart';
 import '../utility/shared_pref.dart' as sh;
 
 Future<void> showMyDialog(c, showDialogCase, [h1, h2]) async {
+  print(sh.SharedPref.getStatoDelVar());
   String strWarning = sh.SharedPref.getStatoDelVar() == 'eng'
       ? Txtriferimenti.strWarningEng
       : Txtriferimenti.strWarningIta;
@@ -17,6 +18,8 @@ Future<void> showMyDialog(c, showDialogCase, [h1, h2]) async {
   String strExportTitle = sh.SharedPref.getStatoDelVar() == 'eng'
       ? Txtriferimenti.strExportTitleEng
       : Txtriferimenti.strExportTitleIta;
+  print(strExport);
+
   return showDialog<void>(
     context: c,
     barrierDismissible: false, // user must tap button!
