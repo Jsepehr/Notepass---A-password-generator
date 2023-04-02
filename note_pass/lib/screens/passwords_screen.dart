@@ -1,39 +1,60 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:note_pass/data_provider/data_providers.dart';
+import 'package:note_pass/model/pwd.dart';
 import 'package:note_pass/utility/passwords_provider.dart';
-import '../utility/shared_pref.dart' as sh;
 import 'package:note_pass/widgets/edit_passwords.dart';
+import '../utility/shared_pref.dart' as sh;
 import 'package:note_pass/widgets/shared_widgets/floating_button.dart';
-import 'package:provider/provider.dart';
+
 import '../utility/txt_riferimento.dart';
 import '../widgets/dialog.dart';
 import '../utility/utility_functions.dart';
 
 // ignore: must_be_immutable
-class PasswordsScreen extends StatefulWidget {
+class PasswordsScreen extends ConsumerStatefulWidget {
   const PasswordsScreen({Key? key}) : super(key: key);
 
   @override
-  State<PasswordsScreen> createState() => _PasswordsScreenState();
+  ConsumerState<PasswordsScreen> createState() => _PasswordsScreenState();
 }
 
-class _PasswordsScreenState extends State<PasswordsScreen> {
+class _PasswordsScreenState extends ConsumerState<PasswordsScreen> {
   String exportBtnStr = sh.SharedPref.getStatoDelVar() == 'eng'
       ? Txtriferimenti.strExportBtnEng
       : Txtriferimenti.strExportBtnIta;
+  List<Pwd> pwdFiltered = [];
+  String val = '';
+
   @override
   void initState() {
-    Passwords().prepareData();
-    //print('$passwords initState');
+    debugPrint('sepehr init State');
     super.initState();
+    Future.delayed(const Duration(milliseconds: 1000), () {
+      ref.read(proGiaEntratoProvider.notifier).state = true;
+      debugPrint('updated list sepehr');
+      pwdFiltered = filterListOfPwd('', ref.watch(proPwdListProvider).value!);
+      // for (var element in pwdFiltered) {
+      //   debugPrint('${element.toString()}   sepehr');
+      // }
+      //ref.read(proArgsProvider.notifier).state = 'pass';
+      setState(() {});
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
-    List psList = [];
+    final psList = ref.watch(proPwdListProvider);
+    pwdFiltered = filterListOfPwd(val, ref.watch(proPwdListProvider).value!);
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: MediaQuery.of(context).viewInsets.bottom == 0
-          ? const NotePassFloatingActionBtn(strVar: "pass")
+          ? const NotePassFloatingActionBtn()
           : Container(),
       appBar: AppBar(
         actions: <Widget>[
@@ -47,7 +68,8 @@ class _PasswordsScreenState extends State<PasswordsScreen> {
                       const BorderSide(color: Colors.white)),
                   foregroundColor: MaterialStateProperty.all(Colors.white),
                 ),
-                onPressed: (() => showMyDialog(context, ShowDialogCase.export)),
+                onPressed: (() =>
+                    showMyDialog(context, ShowDialogCase.export, ref)),
                 child: Text(exportBtnStr),
               ),
             ),
@@ -61,26 +83,56 @@ class _PasswordsScreenState extends State<PasswordsScreen> {
             const SizedBox(height: 15),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 40),
-              child: Passwords().searchField(),
+              child: searchField(
+                fun: (value) {
+                  val = value;
+                  pwdFiltered = filterListOfPwd(value, psList.value!);
+                  setState(() {});
+                  //pwdFilterd.clear();
+                },
+              ),
             ),
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.75,
               child: Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Consumer<Passwords>(builder: (context, password, child) {
-                  password.prepareData().then((value) => psList = value);
-                  return ListView(
+                  padding: const EdgeInsets.all(15.0),
+                  child: ListView(
                     children: [
-                      ...psList
-                          .map((e) => UnPassword(e.pwd, e.hint, e.id, e.flag))
+                      ...pwdFiltered.map(
+                        (e) => UnPassword(
+                          initVal: e.pwdCorpo,
+                          hint: e.pwdHint,
+                          id: e.pwdId,
+                          used: e.flagUsed,
+                          fun: () {
+                            ref.invalidate(proPwdListProvider);
+                          },
+                        ),
+                      ),
                     ],
-                  );
-                }),
-              ),
+                  )),
             )
           ],
         ),
       ),
     );
+  }
+
+  List<Pwd> filterListOfPwd(String needle, List<Pwd> lPwd) {
+    List<Pwd> tmp = [];
+    if (needle != '') {
+      for (var element in lPwd) {
+        if (element.pwdHint.contains(needle)) {
+          tmp.add(element);
+        }
+      }
+      if (tmp.isNotEmpty) {
+        return tmp;
+      } else {
+        return [];
+      }
+    } else {
+      return lPwd;
+    }
   }
 }

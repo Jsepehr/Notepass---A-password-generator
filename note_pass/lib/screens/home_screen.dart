@@ -1,50 +1,52 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:note_pass/data_provider/data_providers.dart';
+import '../model/pwd.dart';
 import '../utility/txt_riferimento.dart';
 import '../utility/notepass_routs.dart';
 import '../utility/utility_functions.dart';
 import '../utility/db_helper.dart';
-import 'package:flutter_screen_lock/flutter_screen_lock.dart';
+//import 'package:flutter_screen_lock/flutter_screen_lock.dart';
 import 'package:local_auth/local_auth.dart';
 import '../utility/shared_pref.dart' as sh;
 import 'package:url_launcher/url_launcher.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends ConsumerState<HomeScreen> {
   bool colors = false;
-
+  bool? _giaEntrato;
   @override
   void initState() {
     linguaggio = sh.SharedPref.getStatoDelVar() ?? 'eng';
     WidgetsBinding.instance.addPostFrameCallback((_) => fetchAndSetPasswords());
+    Future.delayed(const Duration(milliseconds: 100), () {
+      // Do something
+      _giaEntrato = ref.watch(proGiaEntratoProvider.notifier).state;
+    });
     super.initState();
   }
 
   Future<void> localAuth(
-      BuildContext context, String whereTogo, List? data) async {
+      BuildContext context, String whereTogo, WidgetRef ref) async {
     final localAuth = LocalAuthentication();
+    final List<Pwd> data = await ref.watch(proPwdListProvider.future);
     final didAuthenticate = await localAuth.authenticate(
       localizedReason: 'Please authenticate',
       options: const AuthenticationOptions(
-          biometricOnly: false, useErrorDialogs: true, stickyAuth: true),
+          biometricOnly: true, useErrorDialogs: true, stickyAuth: true),
     );
-    if (didAuthenticate && whereTogo == "config" && data == null) {
+    if (didAuthenticate && data.isNotEmpty) {
       // ignore: use_build_context_synchronously
-      Navigator.of(context).pushNamedAndRemoveUntil(Routs().getrouts("config"),
+      Navigator.of(context).pushNamedAndRemoveUntil(Routs.getrouts(whereTogo),
           (_) {
         return false;
       });
-    } else if (didAuthenticate && whereTogo == "pass" && data != null) {
-      // ignore: use_build_context_synchronously
-      Navigator.of(context).pushNamedAndRemoveUntil(Routs().getrouts("pass"),
-          (_) {
-        return false;
-      }, arguments: data);
     }
   }
 
@@ -55,14 +57,12 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  bool _giaEntrato = false;
-
-  List<Map<String, Object?>>? dataList;
+  List<Pwd> dataList = [];
 
   Future fetchAndSetPasswords() async {
-    dataList = await DBhelper.getData();
+    dataList = await ref.watch(proPwdListProvider.future) ?? [];
     setState(() {
-      colors = dataList!.isEmpty;
+      colors = dataList.isEmpty;
     });
   }
 
@@ -72,73 +72,66 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    List<PwdEnt> pwdList = [];
+    //List<Pwd> pwdList = [];
 
-    final List<String> numForRand =
-        Txtriferimenti().getTxtFixedString().split(',');
+    // final List<String> numForRand =
+    //     Txtriferimenti().getTxtFixedString().split(',');
 
-    int i = 0;
+    //int i = 0;
+    //final createPwds = ref.watch(proCreatePwdProvider);
+    // if (args1 != '' && args1 == "gen") {
+    //   DBhelper.delete(DBhelper.tableName);
+    //   final hash1 = ref.watch(proImgAndStrProvider)['imgHash'];
+    //   final hash2 = ref.watch(proImgAndStrProvider)['strHash'];
+    //   var pass1 = createPwds.allDonePreDB(hash1, numForRand);
+    //   var pass2 = createPwds.allDonePreDB(hash2, numForRand);
+    //   for (var item in dueInUno(pass1, pass2)) {
+    //     i++;
+    //     pwdList.add(Pwd(pwdId: i, pwdCorpo: item, pwdHint: '', flagUsed: 0));
+    //   }
+    //   for (var element in pwdList) {
+    //     DBhelper.insert(DBhelper.tableName, {
+    //       "id": element.pwdId,
+    //       "password": element.pwdCorpo,
+    //       "hint": element.pwdHint,
+    //       "used": element.flagUsed
+    //     });
+    //   }
+    //   ref.invalidate(proPwdListProvider);
+    //   showHint(Txtriferimenti()
+    //       .getTxtToastGenerate(sh.SharedPref.getStatoDelVar() ?? "eng"));
+    //   _giaEntrato = true;
+    // } else
 
-    final args1 = ModalRoute.of(context)!.settings.arguments as Args?;
+    // TODO vedere questo
+    // void screenLockWapper(
+    //   context,
+    //   String direzione,
+    //   String parolaChiaveFisso,
+    // ) {
+    //   screenLock(
+    //     context: context,
+    //     correctString: parolaChiaveFisso,
+    //     customizedButtonChild: const Icon(
+    //       Icons.fingerprint,
+    //     ),
+    //     customizedButtonTap: () async {
+    //       await localAuth(context, direzione, ref);
+    //     },
+    //     didOpened: () async {
+    //       await localAuth(context, direzione, ref);
+    //     },
+    //   );
+    // }
 
-    if (args1 != null && args1.messaggio == "gen") {
-      DBhelper.delete(DBhelper.tableName);
-      var pass1 = allDonePreDB(args1.hash1, numForRand);
-      var pass2 = allDonePreDB(args1.hash2, numForRand);
-      for (var item in dueInUno(pass1, pass2)) {
-        i++;
-        pwdList.add(PwdEnt(passId: i, corpo: item, hint: '', flagUsed: 0));
-      }
-      for (var element in pwdList) {
-        DBhelper.insert(DBhelper.tableName, {
-          "id": element.id,
-          "Corpo_p": element.pwd,
-          "Hint_p": element.hint,
-          "used": element.flag
-        });
-      }
-      showHint(Txtriferimenti()
-          .getTxtToastGenerate(sh.SharedPref.getStatoDelVar() ?? "eng"));
-      _giaEntrato = true;
-    } else if (args1?.messaggio == "saved") {
-      showHint(Txtriferimenti()
-          .getTxtToastSalvate(sh.SharedPref.getStatoDelVar() ?? "eng"));
-      _giaEntrato = true;
-      Future.delayed(const Duration(seconds: 1), () {
-        Navigator.of(context).pushNamedAndRemoveUntil(Routs().getrouts("pass"),
-            (_) {
-          return false;
-        }, arguments: dataList);
-      });
-    } else if (args1?.messaggio == "pass") {
-      _giaEntrato = true;
-    }
-
-    void screenLockWapper(
-      context,
-      String direzione,
-      List? listaDati,
-      String parolaChiaveFisso,
-    ) {
-      screenLock(
-        context: context,
-        correctString: parolaChiaveFisso,
-        customizedButtonChild: const Icon(
-          Icons.fingerprint,
-        ),
-        customizedButtonTap: () async {
-          await localAuth(context, direzione, listaDati);
-        },
-        didOpened: () async {
-          await localAuth(context, direzione, listaDati);
-        },
-      );
-    }
-
-    if (_giaEntrato == false) {
-      DBhelper.updateRiga(DBhelper.tableName, {DBhelper.collumsNames[3]: 0}, 1,
-          DBhelper.collumsNames[3]);
-    }
+    // if (_giaEntrato == false) {
+    //   DBhelper.updateRiga(
+    //       tableName: DBhelper.tableName,
+    //       nameValue: {DBhelper.columnsNames[3]: 0},
+    //       whereArg: 1,
+    //       whereColumn: DBhelper.columnsNames[3]);
+    //   ref.invalidate(proPwdListProvider);
+    // }
 
     return Scaffold(
       appBar: AppBar(
@@ -204,17 +197,37 @@ class _HomeScreenState extends State<HomeScreen> {
                         : const BorderSide(
                             color: Color.fromARGB(255, 173, 173, 173)),
                   ),
-                  onPressed: () {
+                  onPressed: () async {
                     if (_giaEntrato == false) {
-                      DBhelper.updateRiga(
-                          DBhelper.tableName,
-                          {DBhelper.collumsNames[3]: 0},
-                          1,
-                          DBhelper.collumsNames[3]);
-                      screenLockWapper(context, "config", null, '7777');
+                      if (await authenticate()) {
+                        DBhelper.updateRiga(
+                            tableName: DBhelper.tableName,
+                            nameValue: {DBhelper.columnsNames[3]: 0},
+                            whereArg: 1,
+                            whereColumn: DBhelper.columnsNames[3]);
+                        ref.invalidate(proPwdListProvider);
+                        if (!mounted) {
+                          return;
+                        }
+                        Navigator.of(context).pushNamedAndRemoveUntil(
+                            Routs.getrouts("config"), (_) {
+                          return false;
+                        });
+                      } else {
+                        if (!mounted) {
+                          return;
+                        }
+                        dialogBuilder(
+                            context: context,
+                            text: 'Authentication failed',
+                            title: 'Warning',
+                            func: () {},
+                            functionOnCancel: () {},
+                            action: '');
+                      }
                     } else {
                       Navigator.of(context).pushNamedAndRemoveUntil(
-                          Routs().getrouts("config"), (_) {
+                          Routs.getrouts("config"), (_) {
                         return false;
                       });
                     }
@@ -231,32 +244,72 @@ class _HomeScreenState extends State<HomeScreen> {
                   height: 25.0,
                 ),
                 ElevatedButton(
-                  onPressed: () {
-                    if (dataList!.isEmpty) {
+                  onPressed: () async {
+                    if (dataList.isEmpty) {
                       if (_giaEntrato == false) {
-                        DBhelper.updateRiga(
-                            DBhelper.tableName,
-                            {DBhelper.collumsNames[3]: 0},
-                            1,
-                            DBhelper.collumsNames[3]);
-                        screenLockWapper(context, "config", null, '7777');
+                        if (await authenticate()) {
+                          DBhelper.updateRiga(
+                              tableName: DBhelper.tableName,
+                              nameValue: {DBhelper.columnsNames[3]: 0},
+                              whereArg: 1,
+                              whereColumn: DBhelper.columnsNames[3]);
+                          ref.invalidate(proPwdListProvider);
+                          if (!mounted) {
+                            return;
+                          }
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                              Routs.getrouts("config"), (_) {
+                            return false;
+                          });
+                        } else {
+                          if (!mounted) {
+                            return;
+                          }
+                          dialogBuilder(
+                              context: context,
+                              text: 'Authentication failed',
+                              title: 'Warning',
+                              func: () {},
+                              functionOnCancel: () {},
+                              action: '');
+                        }
                       } else {
                         Navigator.of(context).pushNamedAndRemoveUntil(
-                            Routs().getrouts("config"), (_) {
+                            Routs.getrouts("config"), (_) {
                           return false;
                         });
                       }
-                    } else if (dataList!.isNotEmpty) {
+                    } else if (dataList.isNotEmpty) {
                       if (_giaEntrato == false) {
-                        DBhelper.updateRiga(
-                            DBhelper.tableName,
-                            {DBhelper.collumsNames[3]: 0},
-                            1,
-                            DBhelper.collumsNames[3]);
-                        screenLockWapper(context, "pass", dataList, '7777');
+                        if (await authenticate()) {
+                          DBhelper.updateRiga(
+                              tableName: DBhelper.tableName,
+                              nameValue: {DBhelper.columnsNames[3]: 0},
+                              whereArg: 1,
+                              whereColumn: DBhelper.columnsNames[3]);
+                          ref.invalidate(proPwdListProvider);
+                          if (!mounted) {
+                            return;
+                          }
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                              Routs.getrouts("pass"), (_) {
+                            return false;
+                          });
+                        } else {
+                          if (!mounted) {
+                            return;
+                          }
+                          dialogBuilder(
+                              context: context,
+                              text: 'Authentication failed',
+                              title: 'Warning',
+                              func: () {},
+                              functionOnCancel: () {},
+                              action: '');
+                        }
                       } else {
                         Navigator.of(context).pushNamedAndRemoveUntil(
-                            Routs().getrouts("pass"), (_) {
+                            Routs.getrouts("pass"), (_) {
                           return false;
                         }, arguments: dataList);
                       }
@@ -282,7 +335,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     TextButton(
                       onPressed: () => Navigator.of(context)
-                          .pushNamed(Routs().getrouts("about")),
+                          .pushNamed(Routs.getrouts("about")),
                       child: const Text(
                         "About",
                         style: TextStyle(fontSize: 16),

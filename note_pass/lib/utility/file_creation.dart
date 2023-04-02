@@ -2,14 +2,18 @@ import 'dart:io';
 import 'package:android_path_provider/android_path_provider.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:note_pass/data_provider/data_providers.dart';
 import 'package:note_pass/utility/txt_riferimento.dart';
 import 'package:note_pass/utility/utility_functions.dart';
 import 'package:note_pass/widgets/dialog.dart';
 import 'package:permission_handler/permission_handler.dart';
+import '../model/pwd.dart';
 import '../utility/shared_pref.dart' as sh;
 
 import 'db_helper.dart';
+import 'notepass_routs.dart';
 
 class FileCreation {
   String hintSaved = sh.SharedPref.getStatoDelVar() == 'eng'
@@ -18,7 +22,7 @@ class FileCreation {
   String hintReady = sh.SharedPref.getStatoDelVar() == 'eng'
       ? Txtriferimenti.strHintGenEng
       : Txtriferimenti.strHintGenIta;
-  List<PwdEnt> pwdList = [];
+  List<Pwd> pwdList = [];
   Future<bool> _requestPermission(Permission permission) async {
     if (await permission.isGranted) {
       return true;
@@ -54,13 +58,13 @@ class FileCreation {
 
     for (var element in data) {
       result +=
-          '${element['Hint_P'] == '' ? 'vuoto' : element['Hint_P']}<|||>${element['Corpo_P']}<|||>';
+          '${element['hint'] == '' ? 'vuoto' : element['hint']}<|||>${element['password']}<|||>';
     }
     file.writeAsString(result);
     showHint(hintSaved);
   }
 
-  void readContentAndRightToDB(BuildContext c) async {
+  void readContentAndRightToDB(BuildContext c, WidgetRef ref) async {
     final result = await FilePicker.platform.pickFiles();
     if (result == null) {
       return;
@@ -75,29 +79,50 @@ class FileCreation {
 
       for (var item in fileContent) {
         i++;
-        pwdList.add(PwdEnt(
-            passId: i,
-            corpo: item[1],
-            hint: item[0] == 'vuoto' ? '' : item[0],
+        pwdList.add(Pwd(
+            pwdId: i,
+            pwdCorpo: item[1],
+            pwdHint: item[0] == 'vuoto' ? '' : item[0],
             flagUsed: 0));
       }
-      DBhelper.delete(DBhelper.tableName);
-      for (var element in pwdList) {
-        DBhelper.insert(DBhelper.tableName, {
-          "id": element.id,
-          "Corpo_p": element.pwd,
-          "Hint_p": element.hint,
-          "used": element.flag
-        }).then((value) {
-          showHint(hintReady);
-          Navigator.of(c).pushNamedAndRemoveUntil("/", (_) {
-            return false;
-          }, arguments: Args(null, null, "pass"));
-        });
+      if (ref.watch(proPwdListProvider).value!.isNotEmpty) {
+        for (var element in pwdList) {
+          DBhelper.updateRiga(
+              tableName: DBhelper.tableName,
+              nameValue: {
+                "id": element.pwdId,
+                "password": element.pwdCorpo,
+                "hint": element.pwdHint,
+                "used": element.flagUsed
+              },
+              whereColumn: DBhelper.columnsNames[0],
+              whereArg: element.pwdId);
+          // debugPrint('${element.toString()} sepehr dopo update');
+        }
+        showHint(hintReady);
+      } else {
+        for (var element in pwdList) {
+          DBhelper.insert(DBhelper.tableName, {
+            "id": element.pwdId,
+            "password": element.pwdCorpo,
+            "hint": element.pwdHint,
+            "used": element.flagUsed
+          });
+        }
+        showHint(hintReady);
       }
+      ref.invalidate(proPwdListProvider);
+      Future.delayed(const Duration(milliseconds: 100), () {
+        Navigator.of(c).pushNamedAndRemoveUntil(
+          Routs.getrouts('pass'),
+          (_) {
+            return false;
+          },
+        );
+      });
     } else {
       // ignore: use_build_context_synchronously
-      showMyDialog(c, ShowDialogCase.warning);
+      showMyDialog(c, ShowDialogCase.warning, ref);
     }
   }
 }

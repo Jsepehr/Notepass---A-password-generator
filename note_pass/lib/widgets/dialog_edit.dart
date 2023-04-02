@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:note_pass/data_provider/data_providers.dart';
 import 'package:note_pass/utility/txt_riferimento.dart';
 import '../utility/db_helper.dart';
 import '../utility/shared_pref.dart' as sh;
@@ -6,7 +8,7 @@ import '../utility/shared_pref.dart' as sh;
 class ShowMeDialog {
   String? _input, _hint;
 
-  Future<void> showMyDialogEdit(c, initVal, id, hint) async {
+  Future<void> showMyDialogEdit(c, initVal, id, hint, WidgetRef ref) async {
     return showDialog<void>(
       context: c,
       barrierDismissible: false, // user must tap button!
@@ -76,10 +78,11 @@ class ShowMeDialog {
                   Navigator.of(context).pop();
                 } else if (_input != null && _hint == null) {
                   DBhelper.updateRiga(
-                      DBhelper.tableName,
-                      {DBhelper.collumsNames[1]: _input},
-                      id,
-                      DBhelper.collumsNames[0]);
+                      tableName: DBhelper.tableName,
+                      nameValue: {DBhelper.columnsNames[1]: _input},
+                      whereArg: id,
+                      whereColumn: DBhelper.columnsNames[0]);
+                  ref.invalidate(proPwdListProvider);
                   Navigator.of(context).pop();
                   /*Navigator.of(context)
                       .pushNamedAndRemoveUntil(Routs().getrouts("pass"), (_) {
@@ -91,10 +94,11 @@ class ShowMeDialog {
                   });*/
                 } else if (_hint != null && _input == null) {
                   DBhelper.updateRiga(
-                      DBhelper.tableName,
-                      {DBhelper.collumsNames[2]: _hint},
-                      id,
-                      DBhelper.collumsNames[0]);
+                      tableName: DBhelper.tableName,
+                      nameValue: {DBhelper.columnsNames[2]: _hint},
+                      whereArg: id,
+                      whereColumn: DBhelper.columnsNames[0]);
+                  ref.invalidate(proPwdListProvider);
                   Navigator.of(context).pop();
                   /*Navigator.of(context)
                       .pushNamedAndRemoveUntil(Routs().getrouts("load"), (_) {
@@ -102,15 +106,16 @@ class ShowMeDialog {
                   });*/
                 } else {
                   DBhelper.updateRiga(
-                      DBhelper.tableName,
-                      {DBhelper.collumsNames[1]: _input},
-                      id,
-                      DBhelper.collumsNames[0]);
+                      tableName: DBhelper.tableName,
+                      nameValue: {DBhelper.columnsNames[1]: _input},
+                      whereArg: id,
+                      whereColumn: DBhelper.columnsNames[0]);
                   DBhelper.updateRiga(
-                      DBhelper.tableName,
-                      {DBhelper.collumsNames[2]: _hint},
-                      id,
-                      DBhelper.collumsNames[0]);
+                      tableName: DBhelper.tableName,
+                      nameValue: {DBhelper.columnsNames[2]: _hint},
+                      whereArg: id,
+                      whereColumn: DBhelper.columnsNames[0]);
+                  ref.invalidate(proPwdListProvider);
                   Navigator.of(context).pop();
                   /*Navigator.of(context)
                       .pushNamedAndRemoveUntil(Routs().getrouts("load"), (_) {

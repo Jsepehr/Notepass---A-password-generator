@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:note_pass/data_provider/data_providers.dart';
+import 'package:note_pass/utility/notepass_routs.dart';
 import 'package:note_pass/utility/txt_riferimento.dart';
+import '../model/pwd.dart';
+import '../utility/db_helper.dart';
 import '../utility/file_creation.dart';
 import '../utility/utility_functions.dart';
 import '../utility/shared_pref.dart' as sh;
 
-Future<void> showMyDialog(c, showDialogCase, [h1, h2]) async {
+Future<void> showMyDialog(c, showDialogCase, WidgetRef ref) async {
+  final h1 = ref.watch(proImgAndStrProvider)['imgHash'];
+  final h2 = ref.watch(proImgAndStrProvider)['strHash'];
+
   print(sh.SharedPref.getStatoDelVar());
   String strWarning = sh.SharedPref.getStatoDelVar() == 'eng'
       ? Txtriferimenti.strWarningEng
@@ -72,9 +80,39 @@ Future<void> showMyDialog(c, showDialogCase, [h1, h2]) async {
                     if (showDialogCase == ShowDialogCase.image &&
                         h1 != null &&
                         h2 != null) {
-                      Navigator.of(context).pushReplacementNamed(
-                        "/",
-                        arguments: Args(h1, h2, "gen"),
+                      DBhelper.delete(DBhelper.tableName);
+                      int i = 0;
+                      List<Pwd> pwdList = [];
+                      final createPwds = ref.watch(proCreatePwdProvider);
+                      final List<String> numForRand =
+                          Txtriferimenti().getTxtFixedString().split(',');
+                      final hash1 = ref.watch(proImgAndStrProvider)['imgHash'];
+                      final hash2 = ref.watch(proImgAndStrProvider)['strHash'];
+                      var pass1 = createPwds.allDonePreDB(hash1, numForRand);
+                      var pass2 = createPwds.allDonePreDB(hash2, numForRand);
+                      for (var item in dueInUno(pass1, pass2)) {
+                        i++;
+                        pwdList.add(Pwd(
+                            pwdId: i,
+                            pwdCorpo: item,
+                            pwdHint: '',
+                            flagUsed: 0));
+                      }
+                      for (var element in pwdList) {
+                        DBhelper.insert(DBhelper.tableName, {
+                          "id": element.pwdId,
+                          "password": element.pwdCorpo,
+                          "hint": element.pwdHint,
+                          "used": element.flagUsed
+                        });
+                      }
+                      ref.invalidate(proPwdListProvider);
+
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                        Routs.getrouts('pass'),
+                        (_) {
+                          return false;
+                        },
                       );
                     } else if (showDialogCase == ShowDialogCase.export) {
                       FileCreation().wrightContentToFile();

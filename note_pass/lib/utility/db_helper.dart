@@ -5,17 +5,17 @@ import 'package:sqflite/sqflite.dart' as sql;
 import "package:path/path.dart" as path;
 
 class DBhelper {
-  static String dbName = "passdb2.db";
-  static String tableName = "passes_db2";
-  static List<String> collumsNames = ["id", "Corpo_P", "Hint_P", "used"];
+  static String dbName = "pass.db";
+  static String tableName = "passwords_new";
+  static List<String> columnsNames = ["id", "password", "hint", "used"];
 
   static Future<sql.Database> database() async {
     final dbPath = await sql.getDatabasesPath();
     return await sql.openDatabase(path.join(dbPath, dbName),
         onCreate: (db, version) {
       return db.execute(
-          'CREATE TABLE IF NOT EXISTS $tableName (${collumsNames[0]} INTEGER, ${collumsNames[1]} TEXT, ${collumsNames[2]} TEXT, ${collumsNames[3]} Boolean)');
-    }, version: 3);
+          'CREATE TABLE IF NOT EXISTS $tableName (${columnsNames[0]} INTEGER, ${columnsNames[1]} TEXT, ${columnsNames[2]} TEXT, ${columnsNames[3]} Boolean)');
+    }, version: 5);
   }
 
   static Future<void> insert(String table, Map<String, Object> data) async {
@@ -34,12 +34,16 @@ class DBhelper {
     db.delete(table);
   }
 
-  static Future<void> updateRiga(String table, Map<String, Object?> values,
-      int whereArg, String whereColumn) async {
+  static Future<void> updateRiga(
+      {required String tableName,
+      required Map<String, Object?> nameValue,
+      required int whereArg,
+      required String whereColumn}) async {
     final db = await DBhelper.database();
     //metti value a qualcosa dove (prende una map {nome colonna : value da mettere}
     //whereColumn è nome colonna e whereArges va a riempire il ?
-    db.update(table, values, where: '$whereColumn = ?', whereArgs: [whereArg]);
+    db.update(tableName, nameValue,
+        where: '$whereColumn = ?', whereArgs: [whereArg]);
   }
 
   static Future<List<Map<String, Object?>>> selectOne(
@@ -52,8 +56,8 @@ class DBhelper {
   static Future<List<Map<String, Object?>>> filterByHint(String str) async {
     final db = await DBhelper.database();
     return db.query(tableName,
-        columns: collumsNames,
-        where: '${collumsNames[2]} LIKE ?',
+        columns: columnsNames,
+        where: '${columnsNames[2]} LIKE ?',
         whereArgs: ['%$str%']);
   }
 }

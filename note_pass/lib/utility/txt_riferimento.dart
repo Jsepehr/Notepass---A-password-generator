@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:note_pass/utility/file_creation.dart';
 
 class Txtriferimenti {
@@ -79,7 +80,7 @@ class Txtriferimenti {
   static String strHintGenIta = 'Le password sono pronte';
 
   static RichText descrizioneConfig(BuildContext context, String str1,
-          String str2, String str3, String str4, String str5) =>
+          String str2, String str3, String str4, String str5, WidgetRef ref) =>
       RichText(
         text: TextSpan(
           style: const TextStyle(color: Colors.black, height: 1.5),
@@ -112,7 +113,7 @@ class Txtriferimenti {
                       icon: Text(str5,
                           style: const TextStyle(color: Colors.white)),
                       onPressed: () {
-                        FileCreation().readContentAndRightToDB(context);
+                        FileCreation().readContentAndRightToDB(context, ref);
                       }),
                 ),
               ),

@@ -1,24 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:note_pass/data_provider/data_providers.dart';
 import 'package:share/share.dart';
 import '../widgets/dialog_edit.dart';
 import '../utility/shared_pref.dart' as sh;
 import '../utility/txt_riferimento.dart';
 import '../utility/db_helper.dart';
 
-class UnPassword extends StatefulWidget {
-  final String _initVal;
-  final String _hint;
-  final int _id;
-  final int _used;
+class UnPassword extends ConsumerStatefulWidget {
+  final String initVal;
+  final String hint;
+  final int id;
+  final int used;
+  final VoidCallback fun;
+  //final TextEditingController controller;
 // ignore: use_key_in_widget_constructors
-  const UnPassword(this._initVal, this._hint, this._id, this._used);
+  const UnPassword({
+    required this.initVal,
+    //required this.controller,
+    required this.hint,
+    required this.id,
+    required this.used,
+    required this.fun,
+  });
   @override
-  State<UnPassword> createState() => _UnPasswordState();
+  ConsumerState<UnPassword> createState() => _UnPasswordState();
 }
 
-class _UnPasswordState extends State<UnPassword> {
+class _UnPasswordState extends ConsumerState<UnPassword> {
   bool _passwordVisible = false;
   bool _obsTxt = true;
+  TextEditingController controller = TextEditingController();
 
   /* Future<void> saveToClipBoard(String testoDaSalvare) async {
     ClipboardData data = ClipboardData(text: testoDaSalvare);
@@ -32,12 +44,16 @@ class _UnPasswordState extends State<UnPassword> {
         backgroundColor: const Color.fromARGB(150, 0, 0, 0),
         textColor: Colors.white,
         fontSize: 16.0);
-    DBhelper.updateRiga(DBhelper.tableName, {DBhelper.collumsNames[3]: 1},
-        widget._id, DBhelper.collumsNames[0]);
+    DBhelper.updateRiga(DBhelper.tableName, {DBhelper.columnsNames[3]: 1},
+        widget._id, DBhelper.columnsNames[0]);
   }*/
 
   @override
   Widget build(BuildContext context) {
+    // debugPrint('${widget.initVal} sepehr initial value');
+    if (widget.initVal != '') {
+      controller.text = widget.initVal;
+    }
     String comment = sh.SharedPref.getStatoDelVar() == 'eng'
         ? Txtriferimenti().getTxtHint('eng')
         : Txtriferimenti().getTxtHint('ita');
@@ -52,7 +68,7 @@ class _UnPasswordState extends State<UnPassword> {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 10),
                   child: Text(
-                    widget._hint.isNotEmpty ? widget._hint : comment,
+                    widget.hint.isNotEmpty ? widget.hint : comment,
                     style: TextStyle(color: Colors.grey.shade500),
                   ),
                 ),
@@ -67,7 +83,7 @@ class _UnPasswordState extends State<UnPassword> {
                         _passwordVisible
                             ? Icons.visibility
                             : Icons.visibility_off,
-                        color: widget._used == 0
+                        color: widget.used == 0
                             ? Theme.of(context).primaryColorDark
                             : Colors.amber.shade800,
                       ),
@@ -80,8 +96,9 @@ class _UnPasswordState extends State<UnPassword> {
                       },
                     ),
                   ),
+                  controller: controller,
                   textAlign: TextAlign.left,
-                  initialValue: widget._initVal,
+                  //initialValue: widget.controller.text,
                   readOnly: true,
                   obscureText: _obsTxt ? true : false,
                   style: const TextStyle(
@@ -95,8 +112,12 @@ class _UnPasswordState extends State<UnPassword> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
                   ElevatedButton(
-                    onPressed: () => ShowMeDialog().showMyDialogEdit(
-                        context, widget._initVal, widget._id, widget._hint),
+                    onPressed: () => ShowMeDialog()
+                        .showMyDialogEdit(context, widget.initVal, widget.id,
+                            widget.hint, ref)
+                        .then((value) {
+                      widget.fun();
+                    }),
                     child: Text(
                       Txtriferimenti()
                           .getTxtEdit(sh.SharedPref.getStatoDelVar() ?? "eng"),
@@ -118,13 +139,14 @@ class _UnPasswordState extends State<UnPassword> {
                     ),
                   ),*/
                   ElevatedButton(
-                    onPressed: () => {
-                      Share.share(widget._initVal),
+                    onPressed: () {
+                      Share.share(widget.initVal);
                       DBhelper.updateRiga(
-                          DBhelper.tableName,
-                          {DBhelper.collumsNames[3]: 1},
-                          widget._id,
-                          DBhelper.collumsNames[0]),
+                          tableName: DBhelper.tableName,
+                          nameValue: {DBhelper.columnsNames[3]: 1},
+                          whereArg: widget.id,
+                          whereColumn: DBhelper.columnsNames[0]);
+                      ref.invalidate(proPwdListProvider);
                       //Navigator.of(context).pushNamed(Routs().getrouts("load"))
                     },
                     child: Text(

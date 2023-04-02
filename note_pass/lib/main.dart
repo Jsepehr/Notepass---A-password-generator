@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:note_pass/screens/config_screen.dart';
 import 'package:note_pass/screens/passwords_screen.dart';
 import 'package:flutter/services.dart';
-import 'package:note_pass/utility/passwords_provider.dart';
-import 'package:provider/provider.dart';
+
 import './screens/home_screen.dart';
 import './utility/notepass_routs.dart';
 import './screens/about_screen.dart';
@@ -14,7 +14,7 @@ Future main() async {
   //sh.SharedPref.init();
   await sh.SharedPref.init();
   sh.SharedPref.setStatoDelVar('eng');
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatefulWidget {
@@ -33,17 +33,14 @@ class _MyAppState extends State<MyApp> {
       DeviceOrientation.portraitUp,
     ]);
 
-    return ChangeNotifierProvider(
-      create: (context) => Passwords(),
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        routes: {
-          '/': (context) => const HomeScreen(),
-          Routs().getrouts("config"): (context) => const ConfigScreen(),
-          Routs().getrouts("pass"): (context) => const PasswordsScreen(),
-          Routs().getrouts("about"): (context) => const About(),
-        },
-      ),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      routes: {
+        '/': (context) => const HomeScreen(),
+        Routs.getrouts("config"): (context) => const ConfigScreen(),
+        Routs.getrouts("pass"): (context) => const PasswordsScreen(),
+        Routs.getrouts("about"): (context) => const About(),
+      },
     );
   }
 }

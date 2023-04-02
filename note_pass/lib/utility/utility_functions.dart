@@ -1,34 +1,40 @@
+import 'dart:convert';
 import 'dart:core';
 import 'dart:io';
-import 'dart:convert';
+
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:local_auth/local_auth.dart';
+
 import 'utility_functions.dart' as utf;
 
 //prendi stringa e fai la lista dei pwd
-allDonePreDB(String? digest, List numsForRand) {
-  List seed = utf.analisiIndici(
-    utf.listToString(
-      utf.strToASCII(digest!),
-    ),
-  );
-  List upAbc = utf.mescolaLista(utf.makeArrASHII(26, 65), seed);
-  List lwdAbc = utf.mescolaLista(utf.makeArrASHII(26, 97), seed);
-  List numbers = utf.mescolaLista(utf.makeArrASHII(10, 48), seed);
-  List specialChars = utf.mescolaLista(utf.makeArrASHII(47 - 32, 32), seed);
+class CreatePasswords {
+  List<String> allDonePreDB(String? digest, List<String> numsForRand) {
+    List<int> seed = utf.analisiIndici(
+      utf.listToString(
+        utf.strToASCII(digest!),
+      ),
+    );
+    List upAbc = utf.mescolaLista(utf.makeArrASHII(26, 65), seed);
+    List lwdAbc = utf.mescolaLista(utf.makeArrASHII(26, 97), seed);
+    List numbers = utf.mescolaLista(utf.makeArrASHII(10, 48), seed);
+    List specialChars = utf.mescolaLista(utf.makeArrASHII(47 - 32, 32), seed);
 
-  var mescolata = utf.mescolaLista(numsForRand, seed);
-  var listapsUnico =
-      utf.scegli(lwdAbc, upAbc, specialChars, numbers, mescolata);
-  listapsUnico = utf.spilitList(listapsUnico);
+    List<String> mescolata = utf.mescolaListaString(numsForRand, seed);
+    List<String> listapsUnico =
+        utf.scegli(lwdAbc, upAbc, specialChars, numbers, mescolata);
+    listapsUnico = utf.spilitList(listapsUnico);
 
-  return listapsUnico;
+    return listapsUnico;
+  }
 }
 
 List<int> makeArrASHII(int l, int fine) {
   //dovrebbe generare una lista numeri
-  var list = List<int>.generate(l, (i) => i + fine);
+  List<int> list = List<int>.generate(l, (i) => i + fine);
   return list;
 }
 
@@ -44,8 +50,8 @@ List<int> strToASCII(String s) {
 }
 
 //split list to più lists
-spilitList(List listaInput) {
-  var listaDiListe = [];
+List<String> spilitList(List listaInput) {
+  List<String> listaDiListe = [];
   var listaTmp = [];
   for (var i = 0; i < listaInput.length; i++) {
     listaTmp.add(listaInput[i]);
@@ -74,8 +80,19 @@ listToString(List l) {
   return l.join();
 }
 
-mescolaLista(List listaDaMescolare, List seed) {
-  var listaMescolata = [];
+List<String> mescolaListaString(List listaDaMescolare, List<int> seed) {
+  List<String> listaMescolata = [];
+
+  for (var i = 0; i < seed.length; i++) {
+    listaMescolata
+        .add((listaDaMescolare[seed[i] % listaDaMescolare.length]).toString());
+  }
+
+  return listaMescolata;
+}
+
+List<int> mescolaLista(List listaDaMescolare, List<int> seed) {
+  List<int> listaMescolata = [];
 
   for (var i = 0; i < seed.length; i++) {
     listaMescolata.add(listaDaMescolare[seed[i] % listaDaMescolare.length]);
@@ -84,8 +101,8 @@ mescolaLista(List listaDaMescolare, List seed) {
   return listaMescolata;
 }
 
-scegli(List a, List b, List c, List d, List seed) {
-  var result = [];
+List<String> scegli(List a, List b, List c, List d, List seed) {
+  List<String> result = [];
   int count = 0;
   for (var item in seed) {
     for (var i = 0; i < item.length; i++) {
@@ -110,8 +127,8 @@ scegli(List a, List b, List c, List d, List seed) {
 }
 
 //questo fa seed
-analisiIndici(String s) {
-  var result = [];
+List<int> analisiIndici(String s) {
+  List<int> result = [];
   for (int i = 0; i < 10; i++) {
     switch (i) {
       case 0:
@@ -197,45 +214,24 @@ Future<String> generateImageHash(File file) async {
   return digest;
 }
 
-generateStringHash(String str) {
+String? generateStringHash(String str) {
   if (str == '') return null;
   var bytes1 = utf8.encode(str); // data being hashed
   var digest1 = sha256.convert(bytes1).toString();
   return digest1;
 }
 
-class Args {
-  final String? hash1, hash2, messaggio;
-  Args(this.hash1, this.hash2, this.messaggio);
-}
+// class Args {
+//   final String? hash1, hash2, messaggio;
+//   Args(this.hash1, this.hash2, this.messaggio);
+// }
 
 //passwords class
-class PwdEnt {
-  final int _pwdId;
-  final String _pwdCorpo;
-  final String _pwdHint;
-  final int _flagUsed;
-  final Function? _fun;
-
-  PwdEnt(
-      {required passId, required corpo, required hint, required flagUsed, fun})
-      : _pwdId = passId,
-        _pwdCorpo = corpo,
-        _pwdHint = hint,
-        _flagUsed = flagUsed,
-        _fun = fun;
-
-  get pwd => _pwdCorpo;
-  get hint => _pwdHint;
-  get id => _pwdId;
-  get flag => _flagUsed;
-  get fun => _fun;
-}
 
 //the function splitList generates a list of lists
-List<List<Object>> splitList(List input, int chunkSize) {
-  final tmpLists = List<Object>.filled(chunkSize, []);
-  List<List<Object>> result = [];
+List<List<String>> splitList(List<String> input, int chunkSize) {
+  final tmpLists = List<String>.filled(chunkSize, '');
+  List<List<String>> result = [];
 
   for (int i = 0; i < input.length - 1; i = chunkSize + i) {
     for (int k = 0; k < tmpLists.length; k++) {
@@ -261,4 +257,60 @@ showHint(String hint) {
 
 class NotePassColors {
   static Color descriptionBg = const Color.fromARGB(255, 219, 239, 255);
+}
+
+Future<bool> authenticate() async {
+  final LocalAuthentication auth = LocalAuthentication();
+  bool authenticated = false;
+  try {
+    authenticated = await auth.authenticate(
+      localizedReason: 'Let OS determine authentication method',
+      options: const AuthenticationOptions(
+        stickyAuth: true,
+      ),
+    );
+    return authenticated;
+  } on PlatformException catch (e) {
+    debugPrint(e.message);
+    return authenticated;
+  }
+}
+
+Future<void> dialogBuilder(
+    {required BuildContext context,
+    required String text,
+    required String title,
+    required VoidCallback func,
+    required VoidCallback functionOnCancel,
+    required String action}) {
+  return showDialog<void>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text(title),
+        content: Text(text),
+        actions: <Widget>[
+          TextButton(
+            style: TextButton.styleFrom(
+              textStyle: Theme.of(context).textTheme.labelLarge,
+            ),
+            child: const Text('Cancel'),
+            onPressed: () {
+              functionOnCancel();
+              Navigator.of(context).pop();
+            },
+          ),
+          TextButton(
+            style: TextButton.styleFrom(
+              textStyle: Theme.of(context).textTheme.labelLarge,
+            ),
+            child: Text(action),
+            onPressed: () {
+              func();
+            },
+          ),
+        ],
+      );
+    },
+  );
 }

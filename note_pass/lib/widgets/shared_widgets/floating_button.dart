@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../utility/utility_functions.dart';
-
 class NotePassFloatingActionBtn extends StatelessWidget {
-  final String strVar;
   const NotePassFloatingActionBtn({
-    required this.strVar,
     Key? key,
   }) : super(key: key);
 
@@ -21,9 +17,12 @@ class NotePassFloatingActionBtn extends StatelessWidget {
         ),
       ),
       onPressed: () {
-        Navigator.of(context).pushNamedAndRemoveUntil("/", (_) {
-          return false;
-        }, arguments: Args(null, null, strVar));
+        Navigator.of(context).pushNamedAndRemoveUntil(
+          "/",
+          (_) {
+            return false;
+          },
+        );
       },
       child: const Icon(
         Icons.home,

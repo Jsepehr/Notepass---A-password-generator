@@ -4,7 +4,7 @@ class Routs {
   static const String _aboutRoute = "/about_route";
   static const String _webview = "/webview";
 
-  getrouts(select) {
+  static String getrouts(select) {
     switch (select) {
       case "config":
         return _configRoute;
@@ -15,5 +15,6 @@ class Routs {
       case "tutorial":
         return _webview;
     }
+    return '';
   }
 }

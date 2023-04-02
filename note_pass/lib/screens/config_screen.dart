@@ -1,27 +1,29 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:note_pass/data_provider/data_providers.dart';
 import 'package:note_pass/widgets/shared_widgets/floating_button.dart';
 import '../utility/txt_riferimento.dart';
 import '../utility/utility_functions.dart';
-import 'package:image_picker/image_picker.dart';
-import 'dart:io';
 import '../widgets/dialog.dart';
 import '../utility/shared_pref.dart' as sh;
 
-class ConfigScreen extends StatefulWidget {
+class ConfigScreen extends ConsumerStatefulWidget {
   const ConfigScreen({Key? key}) : super(key: key);
 
   @override
-  State<ConfigScreen> createState() => _ConfigScreenState();
+  ConsumerState<ConfigScreen> createState() => _ConfigScreenState();
 }
 
-class _ConfigScreenState extends State<ConfigScreen> {
-  dynamic _strHash;
+class _ConfigScreenState extends ConsumerState<ConfigScreen> {
   String? _imgHash;
   int _selColor = 2;
   bool _nullOrNotStr = true;
   final _userPasswordController = TextEditingController();
   bool _passwordVisible = false;
-  String? linguaggio = sh.SharedPref.getStatoDelVar() ?? "eng";
+  String? language = sh.SharedPref.getStatoDelVar() ?? "eng";
 
   Future<void> getPicHash() async {
     final first = ImagePicker();
@@ -36,10 +38,10 @@ class _ConfigScreenState extends State<ConfigScreen> {
       return;
     }
     File storedImage = File(imageFile.path);
-    String hash = await generateImageHash(storedImage);
+    String? hash = await ref.watch(proImgHashProvider(storedImage).future);
+    ref.read(proImgAndStrProvider.notifier).state['imgHash'] = hash;
     setState(() {
       _selColor = 1;
-      _imgHash = hash;
     });
   }
 
@@ -67,6 +69,11 @@ class _ConfigScreenState extends State<ConfigScreen> {
 
   @override
   Widget build(BuildContext context) {
+    _imgHash = ref.watch(proImgAndStrProvider.notifier).state['imgHash'];
+    Future.delayed(const Duration(milliseconds: 2000), () {
+      // Do something
+      ref.read(proGiaEntratoProvider.notifier).state = true;
+    });
     String lingua = sh.SharedPref.getStatoDelVar() ?? 'eng';
     String str1 = lingua == 'eng'
         ? Txtriferimenti.strConf1Eng
@@ -87,7 +94,7 @@ class _ConfigScreenState extends State<ConfigScreen> {
       resizeToAvoidBottomInset: true, // fluter 1.x// fluter 2.x
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: MediaQuery.of(context).viewInsets.bottom == 0
-          ? const NotePassFloatingActionBtn(strVar: "pass")
+          ? const NotePassFloatingActionBtn()
           : Container(),
       appBar: AppBar(
         title: Text(
@@ -109,7 +116,7 @@ class _ConfigScreenState extends State<ConfigScreen> {
                   child: Padding(
                     padding: const EdgeInsets.all(20.0),
                     child: Txtriferimenti.descrizioneConfig(
-                        context, str1, str2, str3, str5, str4),
+                        context, str1, str2, str3, str5, str4, ref),
                   ),
                 ),
                 const SizedBox(
@@ -121,10 +128,10 @@ class _ConfigScreenState extends State<ConfigScreen> {
                     side: borderColor(_selColor),
                   ),
                   onPressed: () {
-                    _imgHash = getPicHash().toString();
+                    getPicHash();
                   },
                   child: Text(
-                    Txtriferimenti().getTxtImmage(linguaggio),
+                    Txtriferimenti().getTxtImmage(language),
                     style: txtColor(_selColor),
                   ),
                 ),
@@ -169,12 +176,16 @@ class _ConfigScreenState extends State<ConfigScreen> {
                 ElevatedButton(
                   //generate button ------------------------------------------
                   onPressed: () {
-                    _strHash = generateStringHash(_userPasswordController.text);
+                    String? strHash = ref.watch(
+                        proStrHashProvider(_userPasswordController.text));
+                    debugPrint('$strHash   sepehr strHash');
+                    ref.read(proImgAndStrProvider.notifier).state['strHash'] =
+                        strHash;
                     if (_imgHash == null) {
                       setState(() {
                         _selColor = 0;
                       });
-                    } else if (_strHash == null) {
+                    } else if (strHash == null) {
                       setState(() {
                         _nullOrNotStr = false;
                       });
@@ -182,14 +193,13 @@ class _ConfigScreenState extends State<ConfigScreen> {
                       setState(() {
                         _nullOrNotStr = true;
                       });
-                      showMyDialog(
-                          context, ShowDialogCase.image, _imgHash, _strHash);
+                      showMyDialog(context, ShowDialogCase.image, ref);
                     }
                   },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 12),
                     child: Text(
-                      Txtriferimenti().getTxtDone(linguaggio),
+                      Txtriferimenti().getTxtDone(language),
                     ),
                   ),
                 ),
