@@ -259,26 +259,74 @@ class NotePassColors {
   static Color descriptionBg = const Color.fromARGB(255, 219, 239, 255);
 }
 
+// Future<Map<String, bool>> authenticate() async {
+//   Map<String, bool> res = {'auth': false, 'canNot': false};
+//   final LocalAuthentication auth = LocalAuthentication();
+//   bool authenticated = false;
+//   bool canCheck = false;
+//   try {
+//     canCheck = await auth.canCheckBiometrics;
+//     if (!canCheck) {
+//       res['canNot'] = canCheck;
+//       return res;
+//     }
+//     authenticated = await auth.authenticate(
+//       localizedReason: 'Let OS determine authentication method',
+//       options: const AuthenticationOptions(
+//         stickyAuth: true,
+//       ),
+//     );
+//     res['auth'] = authenticated;
+//   } on PlatformException catch (e) {
+//     debugPrint(e.message);
+//     res['auth'] = authenticated;
+//     res['canNot'] = canCheck;
+//   }
+//   debugPrint('$res');
+//   return res;
+// }
+
+Future<bool> checkDeviceAuth() async {
+  final LocalAuthentication auth = LocalAuthentication();
+  //return await auth.canCheckBiometrics;
+  bool check = false;
+  try {
+    await auth.isDeviceSupported().then((value) {
+      check = value;
+    });
+    debugPrint('$check   sepehr chek');
+    return check;
+  } catch (e) {
+    debugPrint('${e.toString()}  sepehr');
+    return check;
+  }
+}
+
 Future<bool> authenticate() async {
   final LocalAuthentication auth = LocalAuthentication();
-  bool authenticated = false;
+  bool lockScreen = false;
   try {
-    authenticated = await auth.authenticate(
+    await auth
+        .authenticate(
       localizedReason: 'Let OS determine authentication method',
       options: const AuthenticationOptions(
         stickyAuth: true,
       ),
-    );
-    return authenticated;
-  } on PlatformException catch (e) {
-    debugPrint(e.message);
-    return authenticated;
+    )
+        .then((value) {
+      lockScreen = value;
+    });
+    debugPrint('$lockScreen   sepehr');
+    return lockScreen;
+  } on PlatformException {
+    return lockScreen;
   }
 }
 
 Future<void> dialogBuilder(
     {required BuildContext context,
     required String text,
+    String? cancelText,
     required String title,
     required VoidCallback func,
     required VoidCallback functionOnCancel,
@@ -294,7 +342,7 @@ Future<void> dialogBuilder(
             style: TextButton.styleFrom(
               textStyle: Theme.of(context).textTheme.labelLarge,
             ),
-            child: const Text('Cancel'),
+            child: Text(cancelText ?? 'Cancel'),
             onPressed: () {
               functionOnCancel();
               Navigator.of(context).pop();

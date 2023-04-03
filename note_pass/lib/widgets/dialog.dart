@@ -15,17 +15,17 @@ Future<void> showMyDialog(c, showDialogCase, WidgetRef ref) async {
 
   print(sh.SharedPref.getStatoDelVar());
   String strWarning = sh.SharedPref.getStatoDelVar() == 'eng'
-      ? Txtriferimenti.strWarningEng
-      : Txtriferimenti.strWarningIta;
+      ? Txt.strWarningEng
+      : Txt.strWarningIta;
   String strWarningTitle = sh.SharedPref.getStatoDelVar() == 'eng'
-      ? Txtriferimenti.strWarningEngTitle
-      : Txtriferimenti.strWarningItaTitle;
+      ? Txt.strWarningEngTitle
+      : Txt.strWarningItaTitle;
   String strExport = sh.SharedPref.getStatoDelVar() == 'eng'
-      ? Txtriferimenti.strExportEng
-      : Txtriferimenti.strExportIta;
+      ? Txt.strExportEng
+      : Txt.strExportIta;
   String strExportTitle = sh.SharedPref.getStatoDelVar() == 'eng'
-      ? Txtriferimenti.strExportTitleEng
-      : Txtriferimenti.strExportTitleIta;
+      ? Txt.strExportTitleEng
+      : Txt.strExportTitleIta;
   print(strExport);
 
   return showDialog<void>(
@@ -35,8 +35,7 @@ Future<void> showMyDialog(c, showDialogCase, WidgetRef ref) async {
       return AlertDialog(
         backgroundColor: Colors.yellow,
         title: Text(showDialogCase == ShowDialogCase.image
-            ? Txtriferimenti()
-                .getTxtGen(sh.SharedPref.getStatoDelVar() ?? "eng")
+            ? Txt.getTxtGen(sh.SharedPref.getStatoDelVar() ?? "eng")
             : showDialogCase == ShowDialogCase.export
                 ? strExportTitle
                 : showDialogCase == ShowDialogCase.warning
@@ -47,7 +46,7 @@ Future<void> showMyDialog(c, showDialogCase, WidgetRef ref) async {
             children: <Widget>[
               Text(
                 showDialogCase == ShowDialogCase.image
-                    ? Txtriferimenti().getTxtAvvisoGen(
+                    ? Txt.getTxtAvvisoGen(
                         sh.SharedPref.getStatoDelVar() ?? "eng")
                     : showDialogCase == ShowDialogCase.export
                         ? strExport
@@ -62,8 +61,7 @@ Future<void> showMyDialog(c, showDialogCase, WidgetRef ref) async {
           showDialogCase != ShowDialogCase.warning
               ? TextButton(
                   child: Text(
-                    Txtriferimenti()
-                        .getTxtAnnulla(sh.SharedPref.getStatoDelVar() ?? "eng"),
+                    Txt.getTxtAnnulla(sh.SharedPref.getStatoDelVar() ?? "eng"),
                   ),
                   onPressed: () {
                     Navigator.of(context).pop();
@@ -73,8 +71,7 @@ Future<void> showMyDialog(c, showDialogCase, WidgetRef ref) async {
           showDialogCase != ShowDialogCase.warning
               ? TextButton(
                   child: Text(
-                    Txtriferimenti()
-                        .getTxtApprova(sh.SharedPref.getStatoDelVar() ?? "eng"),
+                    Txt.getTxtApprova(sh.SharedPref.getStatoDelVar() ?? "eng"),
                   ),
                   onPressed: () {
                     if (showDialogCase == ShowDialogCase.image &&
@@ -85,7 +82,7 @@ Future<void> showMyDialog(c, showDialogCase, WidgetRef ref) async {
                       List<Pwd> pwdList = [];
                       final createPwds = ref.watch(proCreatePwdProvider);
                       final List<String> numForRand =
-                          Txtriferimenti().getTxtFixedString().split(',');
+                          Txt.getTxtFixedString().split(',');
                       final hash1 = ref.watch(proImgAndStrProvider)['imgHash'];
                       final hash2 = ref.watch(proImgAndStrProvider)['strHash'];
                       var pass1 = createPwds.allDonePreDB(hash1, numForRand);

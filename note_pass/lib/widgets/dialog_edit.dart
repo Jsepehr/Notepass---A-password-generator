@@ -17,8 +17,7 @@ class ShowMeDialog {
           shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(5.0))),
           title: Text(
-            Txtriferimenti()
-                .getTxtEdit(sh.SharedPref.getStatoDelVar() ?? "eng"),
+            Txt.getTxtEdit(sh.SharedPref.getStatoDelVar() ?? "eng"),
           ),
           content: SingleChildScrollView(
             child: ListBody(
@@ -50,7 +49,7 @@ class ShowMeDialog {
                   onChanged: (input) => _hint = input,
                   decoration: InputDecoration(
                     hintText:
-                        "${Txtriferimenti().getTxtHint(sh.SharedPref.getStatoDelVar() ?? "eng").toString()}...",
+                        "${Txt.getTxtHint(sh.SharedPref.getStatoDelVar() ?? "eng").toString()}...",
                   ),
                   textAlign: TextAlign.left,
                   readOnly: false,
@@ -64,15 +63,15 @@ class ShowMeDialog {
           ),
           actions: <Widget>[
             TextButton(
-              child: Text(Txtriferimenti()
-                  .getTxtAnnulla(sh.SharedPref.getStatoDelVar() ?? "eng")),
+              child: Text(
+                  Txt.getTxtAnnulla(sh.SharedPref.getStatoDelVar() ?? "eng")),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: Text(Txtriferimenti()
-                  .getTxtSalva(sh.SharedPref.getStatoDelVar() ?? "eng")),
+              child: Text(
+                  Txt.getTxtSalva(sh.SharedPref.getStatoDelVar() ?? "eng")),
               onPressed: () {
                 if (_hint == null && _input == null) {
                   Navigator.of(context).pop();

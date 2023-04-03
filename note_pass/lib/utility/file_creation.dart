@@ -16,12 +16,11 @@ import 'db_helper.dart';
 import 'notepass_routs.dart';
 
 class FileCreation {
-  String hintSaved = sh.SharedPref.getStatoDelVar() == 'eng'
-      ? Txtriferimenti.strHintEng
-      : Txtriferimenti.strHintIta;
+  String hintSaved =
+      sh.SharedPref.getStatoDelVar() == 'eng' ? Txt.strHintEng : Txt.strHintIta;
   String hintReady = sh.SharedPref.getStatoDelVar() == 'eng'
-      ? Txtriferimenti.strHintGenEng
-      : Txtriferimenti.strHintGenIta;
+      ? Txt.strHintGenEng
+      : Txt.strHintGenIta;
   List<Pwd> pwdList = [];
   Future<bool> _requestPermission(Permission permission) async {
     if (await permission.isGranted) {

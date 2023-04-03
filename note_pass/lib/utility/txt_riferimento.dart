@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:note_pass/utility/file_creation.dart';
 
-class Txtriferimenti {
+class Txt {
   static const String _fixedString =
       "00123,00213,00231,00312,00321,01023,01032,02031,02310,03021,03120,03210"
       ",10023,10032,10203,10302,10320,12003,13002,13200,20031,20130,20301,21003,23100,30012,30102"
@@ -193,7 +193,7 @@ Ricordare e gestire le password efficaci è sempre stato un problema per me, cos
 \nNotepass genera una serie di password complesse e uniche. Le password vengono create in base all'immagine e alla parola chiave inserite dall'utente nella sezione "configurazioni".
 Quindi l'utente può rigenerare sempre lo stesso elenco di password inserendo la stessa immagine e le stesse parole chiavi usate precedentemente.""";
 
-  getTxtAbout(lang) {
+  static getTxtAbout(lang) {
     switch (lang) {
       case "eng":
         return _aboutEng;
@@ -202,7 +202,7 @@ Quindi l'utente può rigenerare sempre lo stesso elenco di password inserendo la
     }
   }
 
-  getTxtInputTestata(lang) {
+  static getTxtInputTestata(lang) {
     switch (lang) {
       case "eng":
         return _pkiaviEng;
@@ -211,7 +211,7 @@ Quindi l'utente può rigenerare sempre lo stesso elenco di password inserendo la
     }
   }
 
-  getTxtInputHint(lang) {
+  static getTxtInputHint(lang) {
     switch (lang) {
       case "eng":
         return _pchiaveHintEng;
@@ -220,7 +220,7 @@ Quindi l'utente può rigenerare sempre lo stesso elenco di password inserendo la
     }
   }
 
-  getTxtToastCopied(lang) {
+  static getTxtToastCopied(lang) {
     switch (lang) {
       case "eng":
         return _copyToMem;
@@ -229,7 +229,7 @@ Quindi l'utente può rigenerare sempre lo stesso elenco di password inserendo la
     }
   }
 
-  getTxtToastSalvate(lang) {
+  static getTxtToastSalvate(lang) {
     switch (lang) {
       case "eng":
         return _chSavedEng;
@@ -238,7 +238,7 @@ Quindi l'utente può rigenerare sempre lo stesso elenco di password inserendo la
     }
   }
 
-  getTxtToastGenerate(lang) {
+  static getTxtToastGenerate(lang) {
     switch (lang) {
       case "eng":
         return _genrated;
@@ -247,7 +247,7 @@ Quindi l'utente può rigenerare sempre lo stesso elenco di password inserendo la
     }
   }
 
-  getTxtCopy(lang) {
+  static getTxtCopy(lang) {
     switch (lang) {
       case "eng":
         return _copy;
@@ -256,7 +256,7 @@ Quindi l'utente può rigenerare sempre lo stesso elenco di password inserendo la
     }
   }
 
-  getTxtHint(lang) {
+  static getTxtHint(lang) {
     switch (lang) {
       case "eng":
         return _hint;
@@ -265,7 +265,7 @@ Quindi l'utente può rigenerare sempre lo stesso elenco di password inserendo la
     }
   }
 
-  getTxtApprova(lang) {
+  static getTxtApprova(lang) {
     switch (lang) {
       case "eng":
         return _approvEng;
@@ -274,7 +274,7 @@ Quindi l'utente può rigenerare sempre lo stesso elenco di password inserendo la
     }
   }
 
-  getTxtGen(lang) {
+  static getTxtGen(lang) {
     switch (lang) {
       case "eng":
         return _gen;
@@ -283,7 +283,7 @@ Quindi l'utente può rigenerare sempre lo stesso elenco di password inserendo la
     }
   }
 
-  getTxtSalva(lang) {
+  static getTxtSalva(lang) {
     switch (lang) {
       case "eng":
         return _save;
@@ -292,7 +292,7 @@ Quindi l'utente può rigenerare sempre lo stesso elenco di password inserendo la
     }
   }
 
-  getTxtAnnulla(lang) {
+  static getTxtAnnulla(lang) {
     switch (lang) {
       case "eng":
         return _cancel;
@@ -301,7 +301,7 @@ Quindi l'utente può rigenerare sempre lo stesso elenco di password inserendo la
     }
   }
 
-  getTxtAvvisoGen(lang) {
+  static getTxtAvvisoGen(lang) {
     switch (lang) {
       case "eng":
         return _avvisoGenPass;
@@ -310,7 +310,7 @@ Quindi l'utente può rigenerare sempre lo stesso elenco di password inserendo la
     }
   }
 
-  getTxtConfiguration(lang) {
+  static getTxtConfiguration(lang) {
     switch (lang) {
       case "eng":
         return _config;
@@ -319,7 +319,7 @@ Quindi l'utente può rigenerare sempre lo stesso elenco di password inserendo la
     }
   }
 
-  getTxtDone(lang) {
+  static getTxtDone(lang) {
     switch (lang) {
       case "eng":
         return _done;
@@ -328,11 +328,11 @@ Quindi l'utente può rigenerare sempre lo stesso elenco di password inserendo la
     }
   }
 
-  getTxtFixedString() {
+  static getTxtFixedString() {
     return _fixedString;
   }
 
-  getTxtTestata(qualeTestata) {
+  static getTxtTestata(qualeTestata) {
     switch (qualeTestata) {
       case "home":
         return _testatahome;
@@ -345,7 +345,7 @@ Quindi l'utente può rigenerare sempre lo stesso elenco di password inserendo la
     }
   }
 
-  getTxtDesLangHome(lang) {
+  static getTxtDesLangHome(lang) {
     switch (lang) {
       case "ita":
         return _descrizioneIta;
@@ -355,7 +355,7 @@ Quindi l'utente può rigenerare sempre lo stesso elenco di password inserendo la
     }
   }
 
-  getTxtDesLangConfig(lang) {
+  static getTxtDesLangConfig(lang) {
     switch (lang) {
       case "ita":
         return _descrizioneConfigIta;
@@ -365,7 +365,7 @@ Quindi l'utente può rigenerare sempre lo stesso elenco di password inserendo la
     }
   }
 
-  getTxtKeywords(lang) {
+  static getTxtKeywords(lang) {
     switch (lang) {
       case "eng":
         return _keyword;
@@ -374,7 +374,7 @@ Quindi l'utente può rigenerare sempre lo stesso elenco di password inserendo la
     }
   }
 
-  getTxtEdit(lang) {
+  static getTxtEdit(lang) {
     switch (lang) {
       case "eng":
         return _edit;
@@ -383,16 +383,40 @@ Quindi l'utente può rigenerare sempre lo stesso elenco di password inserendo la
     }
   }
 
-  getTxtPwd() {
+  static getTxtPwd() {
     return _pwds;
   }
 
-  getTxtImmage(lang) {
+  static getTxtImmage(lang) {
     switch (lang) {
       case "eng":
         return _chooseImage;
       case "ita":
         return _chooseImageIta;
+    }
+  }
+
+  static const String _warningNoScreenEng =
+      'No Screen Lock found on this device.\nUser authentication required!';
+  static const String _warningNoScreenIta =
+      'Nessuna schermata di blocco trovata su questo dispositivo.\nAutenticazione utente richiesta!';
+  static getTxtScreenLock(lang) {
+    switch (lang) {
+      case "eng":
+        return _warningNoScreenEng;
+      case "ita":
+        return _warningNoScreenIta;
+    }
+  }
+
+  static const String _warningDoneEng = 'Done';
+  static const String _warningDoneIta = 'Fatto';
+  static getTxtDoneLockScreen(linguaggio) {
+    switch (linguaggio) {
+      case "eng":
+        return _warningDoneEng;
+      case "ita":
+        return _warningDoneIta;
     }
   }
 }

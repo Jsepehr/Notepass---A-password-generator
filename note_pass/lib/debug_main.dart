@@ -4,6 +4,14 @@ import 'package:local_auth/local_auth.dart';
 
 void main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
+  final LocalAuthentication auth = LocalAuthentication();
+  // final bool res = await checkDeviceAuth();
+  final res = await auth.getAvailableBiometrics();
+  final res2 = await auth.canCheckBiometrics;
+  final res3 = await auth.isDeviceSupported();
+  debugPrint('$res    sep res');
+  debugPrint('$res2  sep res2');
+  debugPrint('$res3   sep res3');
 
   // List<Pwd> lp = [];
   // var data = await DBhelper.getData();
@@ -26,7 +34,7 @@ void main(List<String> args) async {
   // }
   // data = await DBhelper.getData();
   // debugPrint('$data   sepehr dopo update');
-  runApp(const MyApp());
+  // runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {

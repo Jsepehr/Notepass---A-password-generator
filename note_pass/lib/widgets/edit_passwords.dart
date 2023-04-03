@@ -36,7 +36,7 @@ class _UnPasswordState extends ConsumerState<UnPassword> {
     ClipboardData data = ClipboardData(text: testoDaSalvare);
     await Clipboard.setData(data);
     await Fluttertoast.showToast(
-        msg: Txtriferimenti()
+        msg: Txt
             .getTxtToastCopied(sh.SharedPref.getStatoDelVar() ?? "eng"),
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
@@ -55,8 +55,8 @@ class _UnPasswordState extends ConsumerState<UnPassword> {
       controller.text = widget.initVal;
     }
     String comment = sh.SharedPref.getStatoDelVar() == 'eng'
-        ? Txtriferimenti().getTxtHint('eng')
-        : Txtriferimenti().getTxtHint('ita');
+        ? Txt.getTxtHint('eng')
+        : Txt.getTxtHint('ita');
     return Center(
       child: Card(
         elevation: 0,
@@ -119,8 +119,7 @@ class _UnPasswordState extends ConsumerState<UnPassword> {
                       widget.fun();
                     }),
                     child: Text(
-                      Txtriferimenti()
-                          .getTxtEdit(sh.SharedPref.getStatoDelVar() ?? "eng"),
+                      Txt.getTxtEdit(sh.SharedPref.getStatoDelVar() ?? "eng"),
                     ),
                   ),
                   /*ElevatedButton(
@@ -134,7 +133,7 @@ class _UnPasswordState extends ConsumerState<UnPassword> {
                     onPressed: () =>
                         widget._hint == "" ? null : showHint(widget._hint),
                     child: Text(
-                      Txtriferimenti()
+                      Txt
                           .getTxtHint(sh.SharedPref.getStatoDelVar() ?? "eng"),
                     ),
                   ),*/
@@ -150,8 +149,7 @@ class _UnPasswordState extends ConsumerState<UnPassword> {
                       //Navigator.of(context).pushNamed(Routs().getrouts("load"))
                     },
                     child: Text(
-                      Txtriferimenti()
-                          .getTxtCopy(sh.SharedPref.getStatoDelVar() ?? "eng"),
+                      Txt.getTxtCopy(sh.SharedPref.getStatoDelVar() ?? "eng"),
                     ),
                   ),
                 ],

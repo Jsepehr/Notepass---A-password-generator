@@ -75,21 +75,11 @@ class _ConfigScreenState extends ConsumerState<ConfigScreen> {
       ref.read(proGiaEntratoProvider.notifier).state = true;
     });
     String lingua = sh.SharedPref.getStatoDelVar() ?? 'eng';
-    String str1 = lingua == 'eng'
-        ? Txtriferimenti.strConf1Eng
-        : Txtriferimenti.strConf1Ita;
-    String str2 = lingua == 'eng'
-        ? Txtriferimenti.strConf2Eng
-        : Txtriferimenti.strConf2Ita;
-    String str3 = lingua == 'eng'
-        ? Txtriferimenti.strConf3Eng
-        : Txtriferimenti.strConf3Ita;
-    String str4 = lingua == 'eng'
-        ? Txtriferimenti.strConf4Eng
-        : Txtriferimenti.strConf4Ita;
-    String str5 = lingua == 'eng'
-        ? Txtriferimenti.strConf5Eng
-        : Txtriferimenti.strConf5Ita;
+    String str1 = lingua == 'eng' ? Txt.strConf1Eng : Txt.strConf1Ita;
+    String str2 = lingua == 'eng' ? Txt.strConf2Eng : Txt.strConf2Ita;
+    String str3 = lingua == 'eng' ? Txt.strConf3Eng : Txt.strConf3Ita;
+    String str4 = lingua == 'eng' ? Txt.strConf4Eng : Txt.strConf4Ita;
+    String str5 = lingua == 'eng' ? Txt.strConf5Eng : Txt.strConf5Ita;
     return Scaffold(
       resizeToAvoidBottomInset: true, // fluter 1.x// fluter 2.x
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -98,7 +88,7 @@ class _ConfigScreenState extends ConsumerState<ConfigScreen> {
           : Container(),
       appBar: AppBar(
         title: Text(
-          Txtriferimenti().getTxtTestata("config"),
+          Txt.getTxtTestata("config"),
         ),
       ),
       body: SingleChildScrollView(
@@ -115,7 +105,7 @@ class _ConfigScreenState extends ConsumerState<ConfigScreen> {
                   color: NotePassColors.descriptionBg,
                   child: Padding(
                     padding: const EdgeInsets.all(20.0),
-                    child: Txtriferimenti.descrizioneConfig(
+                    child: Txt.descrizioneConfig(
                         context, str1, str2, str3, str5, str4, ref),
                   ),
                 ),
@@ -131,7 +121,7 @@ class _ConfigScreenState extends ConsumerState<ConfigScreen> {
                     getPicHash();
                   },
                   child: Text(
-                    Txtriferimenti().getTxtImmage(language),
+                    Txt.getTxtImmage(language),
                     style: txtColor(_selColor),
                   ),
                 ),
@@ -148,9 +138,9 @@ class _ConfigScreenState extends ConsumerState<ConfigScreen> {
                     enabledBorder: UnderlineInputBorder(
                         borderSide: BorderSide(
                             color: _nullOrNotStr ? Colors.blue : Colors.red)),
-                    labelText: Txtriferimenti().getTxtInputTestata(
+                    labelText: Txt.getTxtInputTestata(
                         sh.SharedPref.getStatoDelVar() ?? "eng"),
-                    hintText: Txtriferimenti().getTxtInputHint(
+                    hintText: Txt.getTxtInputHint(
                         sh.SharedPref.getStatoDelVar() ?? "eng"),
                     // Here is key idea
                     suffixIcon: IconButton(
@@ -199,7 +189,7 @@ class _ConfigScreenState extends ConsumerState<ConfigScreen> {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 12),
                     child: Text(
-                      Txtriferimenti().getTxtDone(language),
+                      Txt.getTxtDone(language),
                     ),
                   ),
                 ),

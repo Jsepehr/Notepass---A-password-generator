@@ -49,6 +49,7 @@ dependencies:
   url_launcher: ^6.1.6
   file: ^6.1.4
   flutter_riverpod: ^2.3.2
+  app_settings: ^4.2.0
 
 dev_dependencies:
   flutter_test:

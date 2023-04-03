@@ -13,7 +13,7 @@ class About extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(Txtriferimenti().getTxtTestata("about")),
+        title: Text(Txt.getTxtTestata("about")),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -24,7 +24,7 @@ class About extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
               child: Text(
-                Txtriferimenti().getTxtAbout(linguaggio),
+                Txt.getTxtAbout(linguaggio),
                 style: const TextStyle(fontSize: 16, height: 1.3),
               ),
             ),

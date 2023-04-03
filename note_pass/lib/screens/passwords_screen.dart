@@ -21,8 +21,8 @@ class PasswordsScreen extends ConsumerStatefulWidget {
 
 class _PasswordsScreenState extends ConsumerState<PasswordsScreen> {
   String exportBtnStr = sh.SharedPref.getStatoDelVar() == 'eng'
-      ? Txtriferimenti.strExportBtnEng
-      : Txtriferimenti.strExportBtnIta;
+      ? Txt.strExportBtnEng
+      : Txt.strExportBtnIta;
   List<Pwd> pwdFiltered = [];
   String val = '';
 
@@ -75,7 +75,7 @@ class _PasswordsScreenState extends ConsumerState<PasswordsScreen> {
             ),
           ),
         ],
-        title: Text(Txtriferimenti().getTxtTestata("pass")),
+        title: Text(Txt.getTxtTestata("pass")),
       ),
       body: SingleChildScrollView(
         child: Column(

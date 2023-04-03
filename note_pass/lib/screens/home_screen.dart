@@ -1,3 +1,4 @@
+import 'package:app_settings/app_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:note_pass/data_provider/data_providers.dart';
@@ -72,70 +73,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    //List<Pwd> pwdList = [];
-
-    // final List<String> numForRand =
-    //     Txtriferimenti().getTxtFixedString().split(',');
-
-    //int i = 0;
-    //final createPwds = ref.watch(proCreatePwdProvider);
-    // if (args1 != '' && args1 == "gen") {
-    //   DBhelper.delete(DBhelper.tableName);
-    //   final hash1 = ref.watch(proImgAndStrProvider)['imgHash'];
-    //   final hash2 = ref.watch(proImgAndStrProvider)['strHash'];
-    //   var pass1 = createPwds.allDonePreDB(hash1, numForRand);
-    //   var pass2 = createPwds.allDonePreDB(hash2, numForRand);
-    //   for (var item in dueInUno(pass1, pass2)) {
-    //     i++;
-    //     pwdList.add(Pwd(pwdId: i, pwdCorpo: item, pwdHint: '', flagUsed: 0));
-    //   }
-    //   for (var element in pwdList) {
-    //     DBhelper.insert(DBhelper.tableName, {
-    //       "id": element.pwdId,
-    //       "password": element.pwdCorpo,
-    //       "hint": element.pwdHint,
-    //       "used": element.flagUsed
-    //     });
-    //   }
-    //   ref.invalidate(proPwdListProvider);
-    //   showHint(Txtriferimenti()
-    //       .getTxtToastGenerate(sh.SharedPref.getStatoDelVar() ?? "eng"));
-    //   _giaEntrato = true;
-    // } else
-
-    // TODO vedere questo
-    // void screenLockWapper(
-    //   context,
-    //   String direzione,
-    //   String parolaChiaveFisso,
-    // ) {
-    //   screenLock(
-    //     context: context,
-    //     correctString: parolaChiaveFisso,
-    //     customizedButtonChild: const Icon(
-    //       Icons.fingerprint,
-    //     ),
-    //     customizedButtonTap: () async {
-    //       await localAuth(context, direzione, ref);
-    //     },
-    //     didOpened: () async {
-    //       await localAuth(context, direzione, ref);
-    //     },
-    //   );
-    // }
-
-    // if (_giaEntrato == false) {
-    //   DBhelper.updateRiga(
-    //       tableName: DBhelper.tableName,
-    //       nameValue: {DBhelper.columnsNames[3]: 0},
-    //       whereArg: 1,
-    //       whereColumn: DBhelper.columnsNames[3]);
-    //   ref.invalidate(proPwdListProvider);
-    // }
-
     return Scaffold(
       appBar: AppBar(
-        title: Text(Txtriferimenti().getTxtTestata("home")),
+        title: Text(Txt.getTxtTestata("home")),
       ),
       body: SingleChildScrollView(
         child: Center(
@@ -185,7 +125,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   child: Padding(
                       padding: const EdgeInsets.symmetric(
                           vertical: 20, horizontal: 20),
-                      child: Txtriferimenti().getTxtDesLangHome(linguaggio)),
+                      child: Txt.getTxtDesLangHome(linguaggio)),
                 ),
                 const SizedBox(
                   height: 50.0,
@@ -198,8 +138,26 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             color: Color.fromARGB(255, 173, 173, 173)),
                   ),
                   onPressed: () async {
+                    final check = await checkDeviceAuth();
                     if (_giaEntrato == false) {
-                      if (await authenticate()) {
+                      if (!check) {
+                        if (!mounted) {
+                          return;
+                        }
+                        dialogBuilder(
+                            context: context,
+                            cancelText: Txt.getTxtDoneLockScreen(linguaggio),
+                            text: Txt.getTxtScreenLock(linguaggio),
+                            title: 'Warning',
+                            func: () {
+                              AppSettings.openSecuritySettings();
+                            },
+                            functionOnCancel: () {},
+                            action: 'Go to settings');
+                        return;
+                      }
+                      final checkAuth = await authenticate();
+                      if (checkAuth) {
                         DBhelper.updateRiga(
                             tableName: DBhelper.tableName,
                             nameValue: {DBhelper.columnsNames[3]: 0},
@@ -233,7 +191,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     }
                   },
                   child: Text(
-                    Txtriferimenti().getTxtConfiguration(linguaggio),
+                    Txt.getTxtConfiguration(linguaggio),
                     style: TextStyle(
                         color: !colors
                             ? const Color.fromARGB(255, 173, 173, 173)
@@ -246,8 +204,26 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 ElevatedButton(
                   onPressed: () async {
                     if (dataList.isEmpty) {
+                      final check = await checkDeviceAuth();
                       if (_giaEntrato == false) {
-                        if (await authenticate()) {
+                        if (!check) {
+                          if (!mounted) {
+                            return;
+                          }
+                          dialogBuilder(
+                              context: context,
+                              cancelText: Txt.getTxtDoneLockScreen(linguaggio),
+                              text: Txt.getTxtScreenLock(linguaggio),
+                              title: 'Warning',
+                              func: () {
+                                AppSettings.openSecuritySettings();
+                              },
+                              functionOnCancel: () {},
+                              action: 'Go to settings');
+                          return;
+                        }
+                        final checkAuth = await authenticate();
+                        if (checkAuth) {
                           DBhelper.updateRiga(
                               tableName: DBhelper.tableName,
                               nameValue: {DBhelper.columnsNames[3]: 0},
@@ -280,8 +256,26 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         });
                       }
                     } else if (dataList.isNotEmpty) {
+                      final check = await checkDeviceAuth();
                       if (_giaEntrato == false) {
-                        if (await authenticate()) {
+                        if (!check) {
+                          if (!mounted) {
+                            return;
+                          }
+                          dialogBuilder(
+                              context: context,
+                              cancelText: Txt.getTxtDoneLockScreen(linguaggio),
+                              text: Txt.getTxtScreenLock(linguaggio),
+                              title: 'Warning',
+                              func: () {
+                                AppSettings.openSecuritySettings();
+                              },
+                              functionOnCancel: () {},
+                              action: 'Go to settings');
+                          return;
+                        }
+                        final checkAuth = await authenticate();
+                        if (checkAuth) {
                           DBhelper.updateRiga(
                               tableName: DBhelper.tableName,
                               nameValue: {DBhelper.columnsNames[3]: 0},
@@ -309,9 +303,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         }
                       } else {
                         Navigator.of(context).pushNamedAndRemoveUntil(
-                            Routs.getrouts("pass"), (_) {
-                          return false;
-                        }, arguments: dataList);
+                          Routs.getrouts("pass"),
+                          (_) {
+                            return false;
+                          },
+                        );
                       }
                     }
                   },
@@ -323,7 +319,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 12),
                     child: Text(
-                      Txtriferimenti().getTxtPwd(),
+                      Txt.getTxtPwd(),
                     ),
                   ),
                 ),
